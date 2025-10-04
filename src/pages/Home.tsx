@@ -14,8 +14,8 @@ const Home = () => {
       <BackgroundSlideshow />
 
       {/* Content Grid */}
-      <div className="absolute inset-0 z-10 flex items-center justify-center">
-        <div className="grid grid-rows-[auto_auto_1fr] gap-8 md:gap-12 items-center justify-items-center w-full px-6">
+      <div className="absolute inset-0 z-10 flex flex-col">
+        <div className="grid grid-rows-[auto_auto_1fr] items-start justify-items-center w-full px-6 pt-12 md:pt-12 gap-8 md:gap-10">
           {/* Logo */}
           <div
             className={`transition-all duration-1000 ${
@@ -40,7 +40,7 @@ const Home = () => {
 
           {/* Text Content */}
           <div
-            className={`text-center transition-all duration-1000 delay-200 ${
+            className={`text-center transition-all duration-1000 delay-200 mt-20 md:mt-24 ${
               isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
             }`}
           >
