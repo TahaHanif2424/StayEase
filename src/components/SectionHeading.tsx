@@ -45,17 +45,17 @@ const SectionHeading = ({
   return (
     <div
       ref={wrapRef}
-      className={`w-full flex flex-col items-center text-center ${className}`}
+      className={`w-full flex flex-col items-center text-center px-4 ${className}`}
     >
       <h2
-        className={`font-montserrat text-4xl sm:text-5xl md:text-6xl font-extrabold ${textColor} tracking-wide`}
+        className={`font-montserrat text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold ${textColor} tracking-wide`}
         style={{ fontFamily: "'Montserrat', sans-serif" }}
       >
         {title.toUpperCase()}
       </h2>
 
       {/* Divider with arrows (always complete) */}
-      <div className="relative mt-4 h-5 w-full max-w-sm">
+      <div className="relative mt-3 sm:mt-4 h-4 sm:h-5 w-full max-w-[200px] sm:max-w-xs md:max-w-sm">
         <svg
           className="absolute inset-0 w-full h-full"
           viewBox="0 0 400 20"
@@ -81,7 +81,7 @@ const SectionHeading = ({
 
       {subtitle && (
         <p
-          className={`mt-3 text-2xl sm:text-3xl ${subtitleColor}`}
+          className={`mt-2 sm:mt-3 text-lg sm:text-xl md:text-2xl lg:text-3xl ${subtitleColor} px-2`}
           style={{ fontFamily: "'Great Vibes', cursive" }}
         >
           {subtitle}

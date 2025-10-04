@@ -83,7 +83,7 @@ const Plans = () => {
     <section
       id="plans"
       ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-20 px-6 md:px-12 relative overflow-hidden"
+      className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden"
     >
       {/* Background Gradient Shapes
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
@@ -91,7 +91,7 @@ const Plans = () => {
 
       <div className="relative z-10">
         {/* Section Header */}
-        <div className="mb-20">
+        <div className="mb-10 sm:mb-16 md:mb-20">
           <SectionHeading
             title="Our Plans"
             subtitle="Choose the perfect plan that fits your lifestyle and budget"
@@ -100,72 +100,100 @@ const Plans = () => {
         </div>
 
         {/* Cards Container with Expanding Animation */}
-        <div className="relative flex items-center justify-center min-h-[600px]">
+        <div className="relative flex items-center justify-center min-h-[450px] sm:min-h-[550px] md:min-h-[600px]">
           {plans.map((plan, index) => {
+            // Responsive animation values
+            const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+            const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1024;
+
             let translateX = 0;
             let scale = 1;
             let zIndex = 10;
             let opacity = 1;
 
-            if (index === 0) {
-              // Left card
-              translateX = scrollProgress * -350; // Move left
-              scale = 0.75 + scrollProgress * 0.1;
-              zIndex = 8;
-              opacity = scrollProgress;
-            } else if (index === 1) {
-              // Center card (always visible, larger)
+            if (isMobile) {
+              // Mobile: Stack cards vertically with fade-in
               translateX = 0;
-              scale = 1.01;
-              zIndex = 10;
-              opacity = 1;
-            } else if (index === 2) {
-              // Right card
-              translateX = scrollProgress * 350; // Move right
-              scale = 0.75 + scrollProgress * 0.1;
-              zIndex = 8;
-              opacity = scrollProgress;
+              scale = 1;
+              zIndex = 10 - index;
+              opacity = index === 1 ? 1 : scrollProgress;
+            } else if (isTablet) {
+              // Tablet: Reduced movement
+              if (index === 0) {
+                translateX = scrollProgress * -250;
+                scale = 0.8 + scrollProgress * 0.1;
+                zIndex = 8;
+                opacity = scrollProgress;
+              } else if (index === 1) {
+                translateX = 0;
+                scale = 1.01;
+                zIndex = 10;
+                opacity = 1;
+              } else if (index === 2) {
+                translateX = scrollProgress * 250;
+                scale = 0.8 + scrollProgress * 0.1;
+                zIndex = 8;
+                opacity = scrollProgress;
+              }
+            } else {
+              // Desktop: Full animation
+              if (index === 0) {
+                translateX = scrollProgress * -350;
+                scale = 0.75 + scrollProgress * 0.1;
+                zIndex = 8;
+                opacity = scrollProgress;
+              } else if (index === 1) {
+                translateX = 0;
+                scale = 1.01;
+                zIndex = 10;
+                opacity = 1;
+              } else if (index === 2) {
+                translateX = scrollProgress * 350;
+                scale = 0.75 + scrollProgress * 0.1;
+                zIndex = 8;
+                opacity = scrollProgress;
+              }
             }
 
             return (
               <div
                 key={plan.id}
-                className="absolute transition-all duration-700 ease-out"
-                style={{
+                className={`${isMobile ? 'relative mb-6 last:mb-0' : 'absolute'} transition-all duration-700 ease-out`}
+                style={!isMobile ? {
                   transform: `translateX(${translateX}px) scale(${scale})`,
                   zIndex,
                   opacity,
-                }}
+                } : {}}
               >
-                <div className="w-80 bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300">
+                <div className="w-72 sm:w-80 md:w-80 lg:w-80 bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300">
                   {/* Image */}
-                  <div className="relative h-64 overflow-hidden">
+                  <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <img
                       src={plan.image}
                       alt={plan.title}
                       className="w-full h-full object-cover transform hover:scale-110 transition-transform duration-500"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                    <div className="absolute bottom-6 left-6 right-6">
-                      <h3 className="text-3xl font-bold text-white mb-2">
+                    <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6">
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
                         {plan.title}
                       </h3>
-                      <p className="text-2xl font-semibold text-white">
+                      <p className="text-xl sm:text-2xl font-semibold text-white">
                         {plan.price}
                       </p>
                     </div>
                   </div>
 
                   {/* Features */}
-                  <div className="p-8">
-                    <ul className="space-y-4">
+                  <div className="p-6 sm:p-8">
+                    <ul className="space-y-3 sm:space-y-4">
                       {plan.features.map((feature, idx) => (
                         <li
                           key={idx}
-                          className="flex items-center gap-3 text-gray-700"
+                          className="flex items-center gap-2 sm:gap-3 text-gray-700"
                         >
                           <svg
-                            className="w-6 h-6 text-green-500 flex-shrink-0"
+                            className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -177,7 +205,7 @@ const Plans = () => {
                               d="M5 13l4 4L19 7"
                             />
                           </svg>
-                          <span className="text-base">{feature}</span>
+                          <span className="text-sm sm:text-base">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -187,7 +215,7 @@ const Plans = () => {
                         setSelectedPlan(plan.title);
                         setIsModalOpen(true);
                       }}
-                      className="w-full mt-8 py-4 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg"
+                      className="w-full mt-6 sm:mt-8 py-3 sm:py-4 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
                     >
                       Choose Plan
                     </button>
