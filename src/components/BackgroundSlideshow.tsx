@@ -8,15 +8,12 @@ const BackgroundSlideshow = () => {
     '/3.jpg',
     '/4.jpg',
     '/5.jpg',
-    '/6.jpg',
-    '/7.jpg',
-    '/8.jpg',
   ];
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 8000);
+    }, 6000);
 
     return () => clearInterval(interval);
   }, []);
@@ -26,17 +23,18 @@ const BackgroundSlideshow = () => {
       {images.map((image, index) => (
         <div
           key={image}
-          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-1000 ease-in-out ${
+          className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-[2000ms] ease-in-out ${
             index === currentImageIndex
-              ? 'opacity-50 scale-110 animate-zoom'
+              ? 'opacity-50 scale-105'
               : 'opacity-0 scale-100'
           }`}
           style={{
             backgroundImage: `url(${image})`,
+            transform: index === currentImageIndex ? 'scale(1.05) translateY(0)' : 'scale(1) translateY(20px)',
           }}
         />
       ))}
-      <div className="absolute inset-0 bg-black/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
     </div>
   );
 };
