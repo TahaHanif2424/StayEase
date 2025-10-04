@@ -22,16 +22,16 @@ const Navbar = () => {
           About
         </button>
         <button
-          onClick={() => scrollToSection('contact')}
-          className="text-black text-lg md:text-xl font-medium hover:opacity-70 transition-opacity duration-300 cursor-pointer bg-transparent border-none"
-        >
-          Contact
-        </button>
-        <button
           onClick={() => scrollToSection('plans')}
           className="text-black text-lg md:text-xl font-medium hover:opacity-70 transition-opacity duration-300 cursor-pointer bg-transparent border-none"
         >
           Plans
+        </button>
+        <button
+          onClick={() => scrollToSection('contact')}
+          className="text-black text-lg md:text-xl font-medium hover:opacity-70 transition-opacity duration-300 cursor-pointer bg-transparent border-none"
+        >
+          Contact
         </button>
         <button
           onClick={() => scrollToSection('register')}

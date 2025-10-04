@@ -8,6 +8,8 @@ const BackgroundSlideshow = () => {
     '/3.jpg',
     '/4.jpg',
     '/5.jpg',
+    '/6.jpg',
+    '/7.jpg',
   ];
 
   useEffect(() => {
@@ -34,7 +36,6 @@ const BackgroundSlideshow = () => {
           }}
         />
       ))}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/50" />
     </div>
   );
 };

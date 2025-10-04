@@ -11,11 +11,15 @@ const Plans = () => {
         const windowHeight = window.innerHeight;
         const sectionHeight = sectionRef.current.offsetHeight;
 
-        // Calculate scroll progress when section is in view
+        // Calculate scroll progress based on how much of the section has been scrolled through
         if (rect.top <= windowHeight && rect.bottom >= 0) {
-          const visibleHeight = Math.min(rect.bottom, windowHeight) - Math.max(rect.top, 0);
-          const progress = visibleHeight / windowHeight;
-          setScrollProgress(Math.min(progress * 1.5, 1)); // Multiply by 1.5 for faster animation
+          // Progress from 0 (section just entering view) to 1 (section almost scrolled past)
+          const progress = Math.max(0, Math.min((windowHeight - rect.top) / sectionHeight, 1));
+          setScrollProgress(progress);
+        } else if (rect.top > windowHeight) {
+          setScrollProgress(0);
+        } else if (rect.bottom < 0) {
+          setScrollProgress(1);
         }
       }
     };
@@ -82,19 +86,19 @@ const Plans = () => {
             if (index === 0) {
               // Left card
               translateX = scrollProgress * -350; // Move left
-              scale = 0.85 + scrollProgress * 0.15;
+              scale = 0.75 + scrollProgress * 0.1;
               zIndex = 8;
               opacity = scrollProgress;
             } else if (index === 1) {
-              // Center card (always visible)
+              // Center card (always visible, larger)
               translateX = 0;
-              scale = 1;
+              scale = 1.01;
               zIndex = 10;
               opacity = 1;
             } else if (index === 2) {
               // Right card
               translateX = scrollProgress * 350; // Move right
-              scale = 0.85 + scrollProgress * 0.15;
+              scale = 0.75 + scrollProgress * 0.1;
               zIndex = 8;
               opacity = scrollProgress;
             }
@@ -147,7 +151,7 @@ const Plans = () => {
                       ))}
                     </ul>
 
-                    <button className="w-full mt-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <button className="w-full mt-8 py-4 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg">
                       Choose Plan
                     </button>
                   </div>
@@ -155,13 +159,6 @@ const Plans = () => {
               </div>
             );
           })}
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="text-center mt-20">
-          <p className="text-gray-500 text-sm animate-bounce">
-            Scroll to see all plans
-          </p>
         </div>
       </div>
     </section>
