@@ -1,13 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 
 const BackgroundSlideshow = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const images = [
-    '/2.png',
-    '/1.png',
-    '/3.png',
-    '/4.png',
-  ];
+  const images = ["/2.png", "/1.png", "/3.png", "/4.png"];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -24,12 +19,15 @@ const BackgroundSlideshow = () => {
           key={image}
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-[2000ms] ease-in-out ${
             index === currentImageIndex
-              ? 'opacity-100 scale-105'
-              : 'opacity-0 scale-100'
+              ? "opacity-100 scale-105"
+              : "opacity-0 scale-100"
           }`}
           style={{
             backgroundImage: `url(${image})`,
-            transform: index === currentImageIndex ? 'scale(1.05) translateY(0)' : 'scale(1) translateY(20px)',
+            transform:
+              index === currentImageIndex
+                ? "scale(1.05) translateY(0)"
+                : "scale(1) translateY(20px)",
           }}
         />
       ))}

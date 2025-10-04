@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from "react";
 
 const Plans = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -14,7 +14,10 @@ const Plans = () => {
         // Calculate scroll progress based on how much of the section has been scrolled through
         if (rect.top <= windowHeight && rect.bottom >= 0) {
           // Progress from 0 (section just entering view) to 1 (section almost scrolled past)
-          const progress = Math.max(0, Math.min((windowHeight - rect.top) / sectionHeight, 1));
+          const progress = Math.max(
+            0,
+            Math.min((windowHeight - rect.top) / sectionHeight, 1)
+          );
           setScrollProgress(progress);
         } else if (rect.top > windowHeight) {
           setScrollProgress(0);
@@ -24,33 +27,51 @@ const Plans = () => {
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     handleScroll(); // Initial check
 
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const plans = [
     {
       id: 1,
-      title: 'Basic Plan',
-      image: '/1.png',
-      price: '$299/month',
-      features: ['Shared Room', 'Wi-Fi Included', 'Common Kitchen', 'Basic Amenities'],
+      title: "Basic Plan",
+      image: "/1.png",
+      price: "$299/month",
+      features: [
+        "Shared Room",
+        "Wi-Fi Included",
+        "Common Kitchen",
+        "Basic Amenities",
+      ],
     },
     {
       id: 2,
-      title: 'Premium Plan',
-      image: '/2.png',
-      price: '$599/month',
-      features: ['Private Room', 'High-Speed Wi-Fi', 'Personal Kitchen', 'Premium Amenities', 'Gym Access'],
+      title: "Premium Plan",
+      image: "/2.png",
+      price: "$599/month",
+      features: [
+        "Private Room",
+        "High-Speed Wi-Fi",
+        "Personal Kitchen",
+        "Premium Amenities",
+        "Gym Access",
+      ],
     },
     {
       id: 3,
-      title: 'Luxury Plan',
-      image: '/3.png',
-      price: '$999/month',
-      features: ['Studio Apartment', 'Ultra-Fast Wi-Fi', 'Full Kitchen', 'Luxury Amenities', 'Pool & Gym', 'Concierge Service'],
+      title: "Luxury Plan",
+      image: "/3.png",
+      price: "$999/month",
+      features: [
+        "Studio Apartment",
+        "Ultra-Fast Wi-Fi",
+        "Full Kitchen",
+        "Luxury Amenities",
+        "Pool & Gym",
+        "Concierge Service",
+      ],
     },
   ];
 
@@ -123,8 +144,12 @@ const Plans = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-6 left-6 right-6">
-                      <h3 className="text-3xl font-bold text-white mb-2">{plan.title}</h3>
-                      <p className="text-2xl font-semibold text-white">{plan.price}</p>
+                      <h3 className="text-3xl font-bold text-white mb-2">
+                        {plan.title}
+                      </h3>
+                      <p className="text-2xl font-semibold text-white">
+                        {plan.price}
+                      </p>
                     </div>
                   </div>
 
@@ -132,7 +157,10 @@ const Plans = () => {
                   <div className="p-8">
                     <ul className="space-y-4">
                       {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-3 text-gray-700">
+                        <li
+                          key={idx}
+                          className="flex items-center gap-3 text-gray-700"
+                        >
                           <svg
                             className="w-6 h-6 text-green-500 flex-shrink-0"
                             fill="none"
