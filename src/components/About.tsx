@@ -34,7 +34,7 @@ const About = () => {
 
       // Check each card individually (with reverse animation on scroll up)
       const checkCard = (
-        ref: React.RefObject<HTMLDivElement>,
+        ref: React.RefObject<HTMLDivElement | null>,
         setter: (val: boolean) => void
       ) => {
         if (ref.current) {
