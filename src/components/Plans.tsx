@@ -1,7 +1,10 @@
 import { useEffect, useRef, useState } from "react";
+import BookingModal from "./BookingModal";
 
 const Plans = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState("");
   const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -179,7 +182,13 @@ const Plans = () => {
                       ))}
                     </ul>
 
-                    <button className="w-full mt-8 py-4 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg">
+                    <button
+                      onClick={() => {
+                        setSelectedPlan(plan.title);
+                        setIsModalOpen(true);
+                      }}
+                      className="w-full mt-8 py-4 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg"
+                    >
                       Choose Plan
                     </button>
                   </div>
@@ -188,7 +197,21 @@ const Plans = () => {
             );
           })}
         </div>
+
+        {/* Scroll Indicator */}
+        <div className="text-center mt-20">
+          <p className="text-gray-500 text-sm animate-bounce">
+            Scroll to see all plans
+          </p>
+        </div>
       </div>
+
+      {/* Booking Modal */}
+      <BookingModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        planName={selectedPlan}
+      />
     </section>
   );
 };
