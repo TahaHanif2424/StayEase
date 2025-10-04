@@ -1,6 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const Contact = () => {
+  const [isVisible, setIsVisible] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -8,6 +10,27 @@ const Contact = () => {
     subject: "",
     message: "",
   });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (sectionRef.current) {
+        const rect = sectionRef.current.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+
+        // Trigger animation when section is in view, reverse when out of view
+        if (rect.top <= windowHeight * 0.75 && rect.bottom >= windowHeight * 0.25) {
+          setIsVisible(true);
+        } else {
+          setIsVisible(false);
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Initial check
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -29,33 +52,42 @@ const Contact = () => {
   return (
     <section
       id="contact"
-      className="bg-gradient-to-b from-white to-gray-50 py-4 px-6 md:px-12 relative overflow-hidden"
+      ref={sectionRef}
+      className="h-screen bg-[#002650] py-8 px-6 md:px-12 relative overflow-hidden flex items-center"
     >
       {/* Background Shapes */}
-      <div className="absolute top-20 right-10 w-96 h-96 bg-[#002650]/10 rounded-full opacity-30 blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-20 left-10 w-96 h-96 bg-[#002650]/10 rounded-full opacity-20 blur-3xl animate-pulse delay-1000"></div>
+      <div className="absolute top-20 right-10 w-96 h-96 bg-white/5 rounded-full opacity-30 blur-3xl animate-pulse"></div>
+      <div className="absolute bottom-20 left-10 w-96 h-96 bg-white/10 rounded-full opacity-20 blur-3xl animate-pulse delay-1000"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="max-w-7xl mx-auto relative z-10 w-full">
         {/* Section Header */}
-        <div className="text-center mb-10">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-3">
+        <div
+          className={`text-center mb-6 transition-all duration-1000 ${
+            isVisible
+              ? "opacity-100 translate-y-0"
+              : "opacity-0 -translate-y-10"
+          }`}
+        >
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
             Get In Touch
           </h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Have questions? We'd love to hear from you. Send us a message and
-            we'll respond as soon as possible.
-          </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
+        <div className="grid md:grid-cols-2 gap-6">
           {/* Contact Information */}
-          <div className="flex flex-col gap-6">
-            <div className="bg-white p-6 rounded-3xl shadow-xl border border-[#002650]/10 flex-1 flex flex-col">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+          <div
+            className={`flex flex-col gap-4 transition-all duration-1000 delay-200 ${
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-20"
+            }`}
+          >
+            <div className="bg-white p-5 rounded-3xl shadow-xl border border-white/20 flex-1 flex flex-col hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">
                 Contact Information
               </h3>
 
-              <div className="space-y-4 flex-1 flex flex-col justify-around">
+              <div className="space-y-3 flex-1 flex flex-col justify-around">
                 {/* Address */}
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
@@ -179,14 +211,14 @@ const Contact = () => {
             </div>
 
             {/* Social Media */}
-            <div className="bg-white p-6 rounded-3xl shadow-xl border border-[#002650]/10">
-              <h3 className="text-xl font-bold text-gray-900 mb-4">
+            <div className="bg-white p-5 rounded-3xl shadow-xl border border-white/20 hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-lg font-bold text-gray-900 mb-3">
                 Follow Us
               </h3>
               <div className="flex gap-3">
                 <a
                   href="#"
-                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110"
+                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110 hover:rotate-6"
                 >
                   <svg
                     className="w-5 h-5 text-white"
@@ -198,7 +230,7 @@ const Contact = () => {
                 </a>
                 <a
                   href="#"
-                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110"
+                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110 hover:rotate-6"
                 >
                   <svg
                     className="w-5 h-5 text-white"
@@ -210,7 +242,7 @@ const Contact = () => {
                 </a>
                 <a
                   href="#"
-                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110"
+                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110 hover:rotate-6"
                 >
                   <svg
                     className="w-5 h-5 text-white"
@@ -222,7 +254,7 @@ const Contact = () => {
                 </a>
                 <a
                   href="#"
-                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110"
+                  className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110 hover:rotate-6"
                 >
                   <svg
                     className="w-5 h-5 text-white"
@@ -237,11 +269,15 @@ const Contact = () => {
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-6 rounded-3xl shadow-xl border border-[#002650]/10">
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
+          <div
+            className={`bg-white p-5 rounded-3xl shadow-xl border border-white/20 transition-all duration-1000 delay-400 hover:shadow-2xl ${
+              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"
+            }`}
+          >
+            <h3 className="text-lg font-bold text-gray-900 mb-3">
               Send us a Message
             </h3>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label
                   htmlFor="name"
@@ -344,7 +380,7 @@ const Contact = () => {
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg"
+                className="w-full py-3 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
               >
                 Send Message
               </button>
