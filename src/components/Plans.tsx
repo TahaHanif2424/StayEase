@@ -56,11 +56,11 @@ const Plans = () => {
       ref={sectionRef}
       className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-20 px-6 md:px-12 relative overflow-hidden"
     >
-      {/* Background Gradient Shapes */}
+      {/* Background Gradient Shapes
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
-      <div className="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div>
+      <div className="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div> */}
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="relative z-10">
         {/* Section Header */}
         <div className="text-center mb-20">
           <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">

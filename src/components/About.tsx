@@ -63,7 +63,7 @@ const About = () => {
       <div className="absolute top-20 left-10 w-96 h-96 bg-blue-100 rounded-full opacity-30 blur-3xl animate-pulse"></div>
       <div className="absolute bottom-20 right-10 w-96 h-96 bg-blue-200 rounded-full opacity-20 blur-3xl animate-pulse delay-1000"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="relative z-10">
         {/* Section Header */}
         <div
           className={`text-center mb-20 transition-all duration-1000 ${
@@ -166,26 +166,6 @@ const About = () => {
               <div className="hidden md:block w-14 h-14 bg-gradient-to-br from-blue-600 to-blue-500 rounded-full border-4 border-white shadow-xl z-20"></div>
               <div className="hidden md:block w-[500px]"></div>
             </div>
-          </div>
-        </div>
-
-        {/* Stats Section */}
-        <div
-          className={`grid grid-cols-1 md:grid-cols-3 gap-8 mt-32 transition-all duration-1000 ${
-            card3Visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
-          }`}
-        >
-          <div className="text-center p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 hover:shadow-lg transition-shadow duration-300">
-            <p className="text-5xl md:text-6xl font-bold text-blue-600 mb-3">1000+</p>
-            <p className="text-gray-800 font-semibold text-lg">Happy Tenants</p>
-          </div>
-          <div className="text-center p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 hover:shadow-lg transition-shadow duration-300">
-            <p className="text-5xl md:text-6xl font-bold text-blue-600 mb-3">500+</p>
-            <p className="text-gray-800 font-semibold text-lg">Verified Properties</p>
-          </div>
-          <div className="text-center p-8 bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl border border-blue-200 hover:shadow-lg transition-shadow duration-300">
-            <p className="text-5xl md:text-6xl font-bold text-blue-600 mb-3">50+</p>
-            <p className="text-gray-800 font-semibold text-lg">Cities Covered</p>
           </div>
         </div>
       </div>
