@@ -25,7 +25,7 @@ const BackgroundSlideshow = () => {
           key={image}
           className={`absolute inset-0 bg-cover bg-center bg-no-repeat transition-all duration-[2000ms] ease-in-out ${
             index === currentImageIndex
-              ? 'opacity-80 scale-105'
+              ? 'opacity-100 scale-105'
               : 'opacity-0 scale-100'
           }`}
           style={{
