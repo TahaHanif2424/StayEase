@@ -16,24 +16,7 @@ const SectionHeading = ({
   isDark = false,
 }: Props) => {
   const wrapRef = useRef<HTMLDivElement | null>(null);
-  const [internalProgress, setInternalProgress] = useState(0);
 
-  useEffect(() => {
-    if (externalProgress !== undefined) return;
-
-    const onScroll = () => {
-      if (!wrapRef.current) return;
-      const r = wrapRef.current.getBoundingClientRect();
-      const vh = window.innerHeight;
-
-      // Animate when the heading enters the viewport
-      const pct = Math.max(0, Math.min(1, 1 - (r.top - vh * 0.3) / (vh * 0.6)));
-      setInternalProgress(pct);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [externalProgress]);
 
   const textColor = isDark ? "text-white" : "text-gray-900";
   const subtitleColor = isDark ? "text-white/80" : "text-gray-600";
