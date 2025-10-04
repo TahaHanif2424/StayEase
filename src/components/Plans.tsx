@@ -100,10 +100,11 @@ const Plans = () => {
         </div>
 
         {/* Cards Container with Expanding Animation */}
-        <div className="relative flex items-center justify-center min-h-[450px] sm:min-h-[550px] md:min-h-[600px]">
+        <div className="relative flex items-center justify-center min-h-[420px] sm:min-h-[500px] md:min-h-[550px] lg:min-h-[600px]">
           {plans.map((plan, index) => {
             // Responsive animation values
-            const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+            const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
+            const isSmallTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 768;
             const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1024;
 
             let translateX = 0;
@@ -112,11 +113,41 @@ const Plans = () => {
             let opacity = 1;
 
             if (isMobile) {
-              // Mobile: Stack cards vertically with fade-in
-              translateX = 0;
-              scale = 1;
-              zIndex = 10 - index;
-              opacity = index === 1 ? 1 : scrollProgress;
+              // Mobile: Smaller cards with tighter animation
+              if (index === 0) {
+                translateX = scrollProgress * -110; // Reduced from -350
+                scale = 0.65 + scrollProgress * 0.1; // Smaller base scale
+                zIndex = 8;
+                opacity = scrollProgress;
+              } else if (index === 1) {
+                translateX = 0;
+                scale = 0.85; // Smaller center card
+                zIndex = 10;
+                opacity = 1;
+              } else if (index === 2) {
+                translateX = scrollProgress * 110; // Reduced from 350
+                scale = 0.65 + scrollProgress * 0.1;
+                zIndex = 8;
+                opacity = scrollProgress;
+              }
+            } else if (isSmallTablet) {
+              // Small Tablet: Medium-sized cards
+              if (index === 0) {
+                translateX = scrollProgress * -180;
+                scale = 0.7 + scrollProgress * 0.1;
+                zIndex = 8;
+                opacity = scrollProgress;
+              } else if (index === 1) {
+                translateX = 0;
+                scale = 0.95;
+                zIndex = 10;
+                opacity = 1;
+              } else if (index === 2) {
+                translateX = scrollProgress * 180;
+                scale = 0.7 + scrollProgress * 0.1;
+                zIndex = 8;
+                opacity = scrollProgress;
+              }
             } else if (isTablet) {
               // Tablet: Reduced movement
               if (index === 0) {
@@ -158,14 +189,14 @@ const Plans = () => {
             return (
               <div
                 key={plan.id}
-                className={`${isMobile ? 'relative mb-6 last:mb-0' : 'absolute'} transition-all duration-700 ease-out`}
-                style={!isMobile ? {
+                className="absolute transition-all duration-700 ease-out"
+                style={{
                   transform: `translateX(${translateX}px) scale(${scale})`,
                   zIndex,
                   opacity,
-                } : {}}
+                }}
               >
-                <div className="w-72 sm:w-80 md:w-80 lg:w-80 bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300">
+                <div className="w-56 sm:w-72 md:w-80 lg:w-80 bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300">
                   {/* Image */}
                   <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <img
