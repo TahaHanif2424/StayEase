@@ -91,9 +91,9 @@ const About = () => {
         </div>
 
         {/* Story Section with Connecting Line */}
-        <div className="relative flex items-center justify-center">
-          {/* Vertical Connecting Line */}
-          <div className="absolute left-1/2 top-0 bottom-0 w-1 bg-[#002650]/10 transform -translate-x-1/2 hidden lg:block overflow-hidden">
+        <div className="relative flex items-center justify-center pl-8 sm:pl-10 md:pl-12 lg:pl-0">
+          {/* Vertical Connecting Line - Mobile/Tablet (Left Side) */}
+          <div className="absolute left-3 sm:left-4 md:left-5 lg:left-1/2 top-0 bottom-0 w-1 bg-[#002650]/10 lg:transform lg:-translate-x-1/2 overflow-hidden z-0">
             <div
               className="absolute top-0 left-0 right-0 w-full bg-gradient-to-b from-[#002650] via-[#003060] to-[#004080] transition-all duration-1000 ease-out"
               style={{ height: `${scrollProgress * 100}%` }}
@@ -101,7 +101,7 @@ const About = () => {
           </div>
 
           {/* Content Cards */}
-          <div className="space-y-12 sm:space-y-16 md:space-y-20 w-full">
+          <div className="space-y-12 sm:space-y-16 md:space-y-20 w-full relative z-10">
             {/* Card 1 - Our Mission */}
             <div
               ref={card1Ref}
@@ -111,7 +111,7 @@ const About = () => {
                   : "opacity-0 sm:-translate-x-20 -translate-x-10"
               }`}
             >
-              <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[500px] bg-gradient-to-br from-white to-[#002650]/5 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-[#002650]/10 relative z-10">
+              <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[500px] bg-gradient-to-br from-white to-[#002650]/5 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-[#002650]/10">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#002650] to-[#003870] rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6">
                   <svg
                     className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white"
@@ -152,7 +152,7 @@ const About = () => {
                   : "opacity-0 sm:translate-x-20 translate-x-10"
               }`}
             >
-              <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[500px] bg-gradient-to-br from-white to-[#002650]/5 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-[#002650]/10 relative z-10">
+              <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[500px] bg-gradient-to-br from-white to-[#002650]/5 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-[#002650]/10">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#002650] to-[#003870] rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6">
                   <svg
                     className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white"
@@ -198,7 +198,7 @@ const About = () => {
                   : "opacity-0 sm:-translate-x-20 -translate-x-10"
               }`}
             >
-              <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[500px] bg-gradient-to-br from-white to-[#002650]/5 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-[#002650]/10 relative z-10">
+              <div className="w-full sm:w-[90%] md:w-[85%] lg:w-[500px] bg-gradient-to-br from-white to-[#002650]/5 p-6 sm:p-8 md:p-10 rounded-3xl shadow-xl hover:shadow-2xl transition-all duration-300 border border-[#002650]/10">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 bg-gradient-to-br from-[#002650] to-[#003870] rounded-2xl flex items-center justify-center mb-4 sm:mb-5 md:mb-6">
                   <svg
                     className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-white"
