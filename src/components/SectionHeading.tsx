@@ -27,10 +27,7 @@ const SectionHeading = ({
       const vh = window.innerHeight;
 
       // Animate when the heading enters the viewport
-      const pct = Math.max(
-        0,
-        Math.min(1, 1 - (r.top - vh * 0.3) / (vh * 0.6))
-      );
+      const pct = Math.max(0, Math.min(1, 1 - (r.top - vh * 0.3) / (vh * 0.6)));
       setInternalProgress(pct);
     };
     onScroll();

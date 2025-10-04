@@ -103,9 +103,16 @@ const Plans = () => {
         <div className="relative flex items-center justify-center min-h-[420px] sm:min-h-[500px] md:min-h-[550px] lg:min-h-[600px]">
           {plans.map((plan, index) => {
             // Responsive animation values
-            const isMobile = typeof window !== 'undefined' && window.innerWidth < 640;
-            const isSmallTablet = typeof window !== 'undefined' && window.innerWidth >= 640 && window.innerWidth < 768;
-            const isTablet = typeof window !== 'undefined' && window.innerWidth >= 768 && window.innerWidth < 1024;
+            const isMobile =
+              typeof window !== "undefined" && window.innerWidth < 640;
+            const isSmallTablet =
+              typeof window !== "undefined" &&
+              window.innerWidth >= 640 &&
+              window.innerWidth < 768;
+            const isTablet =
+              typeof window !== "undefined" &&
+              window.innerWidth >= 768 &&
+              window.innerWidth < 1024;
 
             let translateX = 0;
             let scale = 1;
@@ -236,7 +243,9 @@ const Plans = () => {
                               d="M5 13l4 4L19 7"
                             />
                           </svg>
-                          <span className="text-sm sm:text-base">{feature}</span>
+                          <span className="text-sm sm:text-base">
+                            {feature}
+                          </span>
                         </li>
                       ))}
                     </ul>

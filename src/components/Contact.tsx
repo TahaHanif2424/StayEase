@@ -21,7 +21,10 @@ const Contact = () => {
         const sectionHeight = sectionRef.current.offsetHeight;
 
         // Trigger animation when section is in view, reverse when out of view
-        if (rect.top <= windowHeight * 0.75 && rect.bottom >= windowHeight * 0.25) {
+        if (
+          rect.top <= windowHeight * 0.75 &&
+          rect.bottom >= windowHeight * 0.25
+        ) {
           setIsVisible(true);
         } else {
           setIsVisible(false);
@@ -30,7 +33,10 @@ const Contact = () => {
         // Calculate scroll progress for heading animation
         if (rect.top <= windowHeight && rect.bottom >= 0) {
           const scrolled = windowHeight - rect.top;
-          const progress = Math.max(0, Math.min(scrolled / (sectionHeight + windowHeight * 0.5), 1));
+          const progress = Math.max(
+            0,
+            Math.min(scrolled / (sectionHeight + windowHeight * 0.5), 1)
+          );
           setScrollProgress(progress);
         } else if (rect.top > windowHeight) {
           setScrollProgress(0);
@@ -50,7 +56,8 @@ const Contact = () => {
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
-  ) => {moti
+  ) => {
+    moti;
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -161,8 +168,12 @@ const Contact = () => {
                     <h4 className="font-semibold text-gray-900 text-xs sm:text-sm mb-0.5 sm:mb-1">
                       Phone
                     </h4>
-                    <p className="text-gray-600 text-xs sm:text-sm">+1 (555) 123-4567</p>
-                    <p className="text-gray-600 text-xs sm:text-sm">+1 (555) 987-6543</p>
+                    <p className="text-gray-600 text-xs sm:text-sm">
+                      +1 (555) 123-4567
+                    </p>
+                    <p className="text-gray-600 text-xs sm:text-sm">
+                      +1 (555) 987-6543
+                    </p>
                   </div>
                 </div>
 
@@ -187,7 +198,9 @@ const Contact = () => {
                     <h4 className="font-semibold text-gray-900 text-xs sm:text-sm mb-0.5 sm:mb-1">
                       Email
                     </h4>
-                    <p className="text-gray-600 text-xs sm:text-sm">info@stayease.com</p>
+                    <p className="text-gray-600 text-xs sm:text-sm">
+                      info@stayease.com
+                    </p>
                     <p className="text-gray-600 text-xs sm:text-sm">
                       support@stayease.com
                     </p>
@@ -221,7 +234,9 @@ const Contact = () => {
                     <p className="text-gray-600 text-xs sm:text-sm">
                       Saturday: 10:00 AM - 4:00 PM
                     </p>
-                    <p className="text-gray-600 text-xs sm:text-sm">Sunday: Closed</p>
+                    <p className="text-gray-600 text-xs sm:text-sm">
+                      Sunday: Closed
+                    </p>
                   </div>
                 </div>
               </div>
@@ -288,7 +303,9 @@ const Contact = () => {
           {/* Contact Form */}
           <div
             className={`bg-white p-4 sm:p-5 md:p-6 rounded-3xl shadow-xl border border-white/20 transition-all duration-1000 delay-400 hover:shadow-2xl ${
-              isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"
+              isVisible
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 translate-x-20"
             }`}
           >
             <h3 className="text-base sm:text-lg md:text-xl font-bold text-gray-900 mb-3 sm:mb-4">

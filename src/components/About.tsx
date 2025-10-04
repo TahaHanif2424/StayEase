@@ -47,7 +47,10 @@ const About = () => {
 
           if (rect.top <= windowHeight * triggerPoint && rect.bottom >= 0) {
             setter(true);
-          } else if (rect.top > windowHeight * triggerPoint || rect.bottom < 0) {
+          } else if (
+            rect.top > windowHeight * triggerPoint ||
+            rect.bottom < 0
+          ) {
             setter(false);
           }
         }
