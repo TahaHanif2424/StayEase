@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import BookingModal from "./BookingModal";
+import SectionHeading from "./SectionHeading";
 
 const Plans = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -90,13 +91,12 @@ const Plans = () => {
 
       <div className="relative z-10">
         {/* Section Header */}
-        <div className="text-center mb-20">
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Our Plans
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Choose the perfect plan that fits your lifestyle and budget
-          </p>
+        <div className="mb-20">
+          <SectionHeading
+            title="Our Plans"
+            subtitle="Choose the perfect plan that fits your lifestyle and budget"
+            progress={scrollProgress}
+          />
         </div>
 
         {/* Cards Container with Expanding Animation */}

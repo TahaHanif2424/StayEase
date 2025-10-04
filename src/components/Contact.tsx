@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from "react";
+import SectionHeading from "./SectionHeading";
 
 const Contact = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
   const [formData, setFormData] = useState({
     name: "",
@@ -16,12 +18,24 @@ const Contact = () => {
       if (sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
+        const sectionHeight = sectionRef.current.offsetHeight;
 
         // Trigger animation when section is in view, reverse when out of view
         if (rect.top <= windowHeight * 0.75 && rect.bottom >= windowHeight * 0.25) {
           setIsVisible(true);
         } else {
           setIsVisible(false);
+        }
+
+        // Calculate scroll progress for heading animation
+        if (rect.top <= windowHeight && rect.bottom >= 0) {
+          const scrolled = windowHeight - rect.top;
+          const progress = Math.max(0, Math.min(scrolled / (sectionHeight + windowHeight * 0.5), 1));
+          setScrollProgress(progress);
+        } else if (rect.top > windowHeight) {
+          setScrollProgress(0);
+        } else if (rect.bottom < 0) {
+          setScrollProgress(1);
         }
       }
     };
@@ -36,7 +50,7 @@ const Contact = () => {
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
-  ) => {
+  ) => {moti
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -53,46 +67,49 @@ const Contact = () => {
     <section
       id="contact"
       ref={sectionRef}
-      className="h-screen bg-[#002650] py-8 px-6 md:px-12 relative overflow-hidden flex items-center"
+      className="min-h-screen bg-[#002650] py-6 px-6 md:px-12 relative overflow-hidden flex items-center"
     >
       {/* Background Shapes */}
       <div className="absolute top-20 right-10 w-96 h-96 bg-white/5 rounded-full opacity-30 blur-3xl animate-pulse"></div>
       <div className="absolute bottom-20 left-10 w-96 h-96 bg-white/10 rounded-full opacity-20 blur-3xl animate-pulse delay-1000"></div>
 
-      <div className="max-w-7xl mx-auto relative z-10 w-full">
+      <div className="max-w-6xl mx-auto relative z-10 w-full">
         {/* Section Header */}
         <div
-          className={`text-center mb-6 transition-all duration-1000 ${
+          className={`mb-4 transition-all duration-1000 ${
             isVisible
               ? "opacity-100 translate-y-0"
               : "opacity-0 -translate-y-10"
           }`}
         >
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-2">
-            Get In Touch
-          </h2>
+          <SectionHeading
+            title="Get In Touch"
+            subtitle="Have questions? We'd love to hear from you"
+            progress={scrollProgress}
+            isDark={true}
+          />
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-4">
           {/* Contact Information */}
           <div
-            className={`flex flex-col gap-4 transition-all duration-1000 delay-200 ${
+            className={`flex flex-col gap-3 transition-all duration-1000 delay-200 ${
               isVisible
                 ? "opacity-100 translate-x-0"
                 : "opacity-0 -translate-x-20"
             }`}
           >
-            <div className="bg-white p-5 rounded-3xl shadow-xl border border-white/20 flex-1 flex flex-col hover:shadow-2xl transition-shadow duration-300">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">
+            <div className="bg-white p-4 rounded-3xl shadow-xl border border-white/20 flex-1 flex flex-col hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-base font-bold text-gray-900 mb-2">
                 Contact Information
               </h3>
 
-              <div className="space-y-3 flex-1 flex flex-col justify-around">
+              <div className="space-y-2 flex-1 flex flex-col justify-around">
                 {/* Address */}
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-4 h-4 text-white"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -112,10 +129,10 @@ const Contact = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">
+                    <h4 className="font-semibold text-gray-900 text-xs mb-0.5">
                       Address
                     </h4>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-xs leading-tight">
                       123 StayEase Avenue, Downtown District
                       <br />
                       New York, NY 10001
@@ -124,10 +141,10 @@ const Contact = () => {
                 </div>
 
                 {/* Phone */}
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-4 h-4 text-white"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -141,19 +158,19 @@ const Contact = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">
+                    <h4 className="font-semibold text-gray-900 text-xs mb-0.5">
                       Phone
                     </h4>
-                    <p className="text-gray-600 text-sm">+1 (555) 123-4567</p>
-                    <p className="text-gray-600 text-sm">+1 (555) 987-6543</p>
+                    <p className="text-gray-600 text-xs">+1 (555) 123-4567</p>
+                    <p className="text-gray-600 text-xs">+1 (555) 987-6543</p>
                   </div>
                 </div>
 
                 {/* Email */}
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-4 h-4 text-white"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -167,21 +184,21 @@ const Contact = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">
+                    <h4 className="font-semibold text-gray-900 text-xs mb-0.5">
                       Email
                     </h4>
-                    <p className="text-gray-600 text-sm">info@stayease.com</p>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-xs">info@stayease.com</p>
+                    <p className="text-gray-600 text-xs">
                       support@stayease.com
                     </p>
                   </div>
                 </div>
 
                 {/* Business Hours */}
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
+                <div className="flex items-start gap-2">
+                  <div className="w-8 h-8 bg-[#002650] rounded-xl flex items-center justify-center flex-shrink-0">
                     <svg
-                      className="w-5 h-5 text-white"
+                      className="w-4 h-4 text-white"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -195,27 +212,27 @@ const Contact = () => {
                     </svg>
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 text-sm mb-1">
+                    <h4 className="font-semibold text-gray-900 text-xs mb-0.5">
                       Business Hours
                     </h4>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-xs">
                       Monday - Friday: 9:00 AM - 6:00 PM
                     </p>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-xs">
                       Saturday: 10:00 AM - 4:00 PM
                     </p>
-                    <p className="text-gray-600 text-sm">Sunday: Closed</p>
+                    <p className="text-gray-600 text-xs">Sunday: Closed</p>
                   </div>
                 </div>
               </div>
             </div>
 
             {/* Social Media */}
-            <div className="bg-white p-5 rounded-3xl shadow-xl border border-white/20 hover:shadow-2xl transition-shadow duration-300">
-              <h3 className="text-lg font-bold text-gray-900 mb-3">
+            <div className="bg-white p-3 rounded-3xl shadow-xl border border-white/20 hover:shadow-2xl transition-shadow duration-300">
+              <h3 className="text-base font-bold text-gray-900 mb-2">
                 Follow Us
               </h3>
-              <div className="flex gap-3">
+              <div className="flex gap-2">
                 <a
                   href="#"
                   className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110 hover:rotate-6"
@@ -228,7 +245,7 @@ const Contact = () => {
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                 </a>
-                <a
+                {/* <a
                   href="#"
                   className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110 hover:rotate-6"
                 >
@@ -239,9 +256,9 @@ const Contact = () => {
                   >
                     <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z" />
                   </svg>
-                </a>
+                </a> */}
                 <a
-                  href="#"
+                  href="https://www.instagram.com/stay_ease_?igsh=MTJ4NnFtczF3Y2xqbg=="
                   className="w-10 h-10 bg-[#002650] rounded-xl flex items-center justify-center hover:bg-[#003870] transition-all duration-300 transform hover:scale-110 hover:rotate-6"
                 >
                   <svg
@@ -270,18 +287,18 @@ const Contact = () => {
 
           {/* Contact Form */}
           <div
-            className={`bg-white p-5 rounded-3xl shadow-xl border border-white/20 transition-all duration-1000 delay-400 hover:shadow-2xl ${
+            className={`bg-white p-4 rounded-3xl shadow-xl border border-white/20 transition-all duration-1000 delay-400 hover:shadow-2xl ${
               isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-20"
             }`}
           >
-            <h3 className="text-lg font-bold text-gray-900 mb-3">
+            <h3 className="text-base font-bold text-gray-900 mb-2">
               Send us a Message
             </h3>
-            <form onSubmit={handleSubmit} className="space-y-3">
+            <form onSubmit={handleSubmit} className="space-y-2">
               <div>
                 <label
                   htmlFor="name"
-                  className="block text-sm font-semibold text-gray-700 mb-1"
+                  className="block text-xs font-semibold text-gray-700 mb-0.5"
                 >
                   Full Name *
                 </label>
@@ -292,7 +309,7 @@ const Contact = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:border-[#002650] focus:ring-2 focus:ring-[#002650]/20 outline-none transition-all duration-300"
+                  className="w-full px-3 py-1.5 text-xs rounded-xl border border-gray-300 focus:border-[#002650] focus:ring-2 focus:ring-[#002650]/20 outline-none transition-all duration-300"
                   placeholder="John Doe"
                 />
               </div>
@@ -300,7 +317,7 @@ const Contact = () => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-gray-700 mb-0.5"
                 >
                   Email Address *
                 </label>
@@ -319,7 +336,7 @@ const Contact = () => {
               <div>
                 <label
                   htmlFor="phone"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-gray-700 mb-0.5"
                 >
                   Phone Number
                 </label>
@@ -337,7 +354,7 @@ const Contact = () => {
               <div>
                 <label
                   htmlFor="subject"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-gray-700 mb-0.5"
                 >
                   Subject *
                 </label>
@@ -362,7 +379,7 @@ const Contact = () => {
               <div>
                 <label
                   htmlFor="message"
-                  className="block text-sm font-semibold text-gray-700 mb-2"
+                  className="block text-xs font-semibold text-gray-700 mb-0.5"
                 >
                   Message *
                 </label>
@@ -372,15 +389,15 @@ const Contact = () => {
                   value={formData.message}
                   onChange={handleChange}
                   required
-                  rows={3}
-                  className="w-full px-4 py-2 rounded-xl border border-gray-300 focus:border-[#002650] focus:ring-2 focus:ring-[#002650]/20 outline-none transition-all duration-300 resize-none"
+                  rows={2}
+                  className="w-full px-3 py-1.5 text-xs rounded-xl border border-gray-300 focus:border-[#002650] focus:ring-2 focus:ring-[#002650]/20 outline-none transition-all duration-300 resize-none"
                   placeholder="Tell us how we can help you..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full py-3 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
+                className="w-full py-2 text-xs bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-lg"
               >
                 Send Message
               </button>

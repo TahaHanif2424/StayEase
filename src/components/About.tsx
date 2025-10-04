@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import SectionHeading from "./SectionHeading";
 
 const About = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -72,22 +73,17 @@ const About = () => {
       <div className="relative z-10">
         {/* Section Header */}
         <div
-          className={`text-center mb-20 transition-all duration-1000 ${
+          className={`mb-20 transition-all duration-1000 ${
             scrollProgress > 0
               ? "opacity-100 translate-y-0"
               : "opacity-0 translate-y-10"
           }`}
         >
-          <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 relative inline-block">
-            About Us
-            <div
-              className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-[#002650] to-[#004080] transform origin-left transition-all duration-1000"
-              style={{ transform: `scaleX(${scrollProgress})` }}
-            ></div>
-          </h2>
-          <p className="text-xl text-gray-700 mt-8 max-w-2xl mx-auto">
-            Transforming the way you find your perfect living space
-          </p>
+          <SectionHeading
+            title="About Us"
+            subtitle="Transforming the way you find your perfect living space"
+            progress={scrollProgress}
+          />
         </div>
 
         {/* Story Section with Connecting Line */}
