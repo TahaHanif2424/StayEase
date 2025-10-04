@@ -197,13 +197,6 @@ const Plans = () => {
             );
           })}
         </div>
-
-        {/* Scroll Indicator */}
-        <div className="text-center mt-20">
-          <p className="text-gray-500 text-sm animate-bounce">
-            Scroll to see all plans
-          </p>
-        </div>
       </div>
 
       {/* Booking Modal */}
