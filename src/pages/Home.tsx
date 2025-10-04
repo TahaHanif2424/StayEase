@@ -3,6 +3,7 @@ import BackgroundSlideshow from '../components/BackgroundSlideshow';
 import Navbar from '../components/Navbar';
 import About from '../components/About';
 import Plans from '../components/Plans';
+import Contact from '../components/Contact';
 
 const Home = () => {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -63,6 +64,9 @@ const Home = () => {
 
       {/* Plans Section */}
       <Plans />
+
+      {/* Contact Section */}
+      <Contact />
     </>
   );
 };

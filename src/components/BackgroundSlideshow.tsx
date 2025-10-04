@@ -3,13 +3,10 @@ import { useState, useEffect } from 'react';
 const BackgroundSlideshow = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = [
-    '/1.jpg',
-    '/2.jpg',
-    '/3.jpg',
-    '/4.jpg',
-    '/5.jpg',
-    '/6.jpg',
-    '/7.jpg',
+    '/2.png"',
+    '/1.png',
+    '/3.png',
+    '/4.png',
   ];
 
   useEffect(() => {
