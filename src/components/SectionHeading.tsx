@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 
 type Props = {
   title: string;
@@ -11,7 +11,6 @@ type Props = {
 const SectionHeading = ({
   title,
   subtitle,
-  progress: externalProgress,
   className = "",
   isDark = false,
 }: Props) => {
