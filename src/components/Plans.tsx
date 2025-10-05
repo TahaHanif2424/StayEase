@@ -127,7 +127,12 @@ const Plans = () => {
       title: "Basic Plan",
       image: "/1.png",
       price: "$299/month",
-      features: ["Shared Room", "Wi-Fi Included", "Common Kitchen", "Basic Amenities"],
+      features: [
+        "Shared Room",
+        "Wi-Fi Included",
+        "Common Kitchen",
+        "Basic Amenities",
+      ],
     },
     {
       id: 2,
@@ -187,8 +192,18 @@ const Plans = () => {
             className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Previous plan"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
             </svg>
           </button>
 
@@ -197,17 +212,32 @@ const Plans = () => {
             className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Next plan"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
             </svg>
           </button>
 
           {plans.map((plan, index) => {
-            const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+            const isMobile =
+              typeof window !== "undefined" && window.innerWidth < 640;
             const isSmallTablet =
-              typeof window !== "undefined" && window.innerWidth >= 640 && window.innerWidth < 768;
+              typeof window !== "undefined" &&
+              window.innerWidth >= 640 &&
+              window.innerWidth < 768;
             const isTablet =
-              typeof window !== "undefined" && window.innerWidth >= 768 && window.innerWidth < 1024;
+              typeof window !== "undefined" &&
+              window.innerWidth >= 768 &&
+              window.innerWidth < 1024;
 
             let translateX = 0;
             let scale = 1;
@@ -215,7 +245,8 @@ const Plans = () => {
             let opacity = 1;
 
             if (isMobile || isSmallTablet || isTablet) {
-              const position = (index - currentIndex + plans.length) % plans.length;
+              const position =
+                (index - currentIndex + plans.length) % plans.length;
 
               if (position === 0) {
                 translateX = 0;
@@ -276,8 +307,12 @@ const Plans = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">{plan.title}</h3>
-                      <p className="text-xl sm:text-2xl font-semibold text-white">{plan.price}</p>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
+                        {plan.title}
+                      </h3>
+                      <p className="text-xl sm:text-2xl font-semibold text-white">
+                        {plan.price}
+                      </p>
                     </div>
                   </div>
 
@@ -285,11 +320,26 @@ const Plans = () => {
                   <div className="p-6 sm:p-8 flex-1 flex flex-col">
                     <ul className="space-y-3 sm:space-y-4 flex-1">
                       {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 sm:gap-3 text-gray-700">
-                          <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                        <li
+                          key={idx}
+                          className="flex items-center gap-2 sm:gap-3 text-gray-700"
+                        >
+                          <svg
+                            className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M5 13l4 4L19 7"
+                            />
                           </svg>
-                          <span className="text-sm sm:text-base">{feature}</span>
+                          <span className="text-sm sm:text-base">
+                            {feature}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -324,7 +374,9 @@ const Plans = () => {
                   }
                 }}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? "bg-[#002650] w-8" : "bg-gray-300 hover:bg-gray-400"
+                  index === currentIndex
+                    ? "bg-[#002650] w-8"
+                    : "bg-gray-300 hover:bg-gray-400"
                 }`}
                 aria-label={`Go to plan ${index + 1}`}
               />
