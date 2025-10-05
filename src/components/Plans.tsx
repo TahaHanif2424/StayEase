@@ -6,7 +6,9 @@ const Plans = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
+  const autoRotateRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -36,6 +38,45 @@ const Plans = () => {
 
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Auto-rotate for small screens
+  useEffect(() => {
+    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+
+    if (isMobile) {
+      autoRotateRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % plans.length);
+      }, 2000);
+
+      return () => {
+        if (autoRotateRef.current) {
+          clearInterval(autoRotateRef.current);
+        }
+      };
+    }
+  }, []);
+
+  const rotateRight = () => {
+    setCurrentIndex((prev) => (prev + 1) % plans.length);
+    // Reset auto-rotate timer
+    if (autoRotateRef.current) {
+      clearInterval(autoRotateRef.current);
+      autoRotateRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % plans.length);
+      }, 4000);
+    }
+  };
+
+  const rotateLeft = () => {
+    setCurrentIndex((prev) => (prev - 1 + plans.length) % plans.length);
+    // Reset auto-rotate timer
+    if (autoRotateRef.current) {
+      clearInterval(autoRotateRef.current);
+      autoRotateRef.current = setInterval(() => {
+        setCurrentIndex((prev) => (prev + 1) % plans.length);
+      }, 4000);
+    }
+  };
 
   const plans = [
     {
@@ -101,6 +142,47 @@ const Plans = () => {
 
         {/* Cards Container with Expanding Animation */}
         <div className="relative flex items-center justify-center min-h-[420px] sm:min-h-[500px] md:min-h-[550px] lg:min-h-[600px]">
+          {/* Mobile Navigation Buttons */}
+          <button
+            onClick={rotateLeft}
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 sm:hidden"
+            aria-label="Previous plan"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </button>
+
+          <button
+            onClick={rotateRight}
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 sm:hidden"
+            aria-label="Next plan"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </button>
+
           {plans.map((plan, index) => {
             // Responsive animation values
             const isMobile =
@@ -120,30 +202,35 @@ const Plans = () => {
             let opacity = 1;
 
             if (isMobile) {
-              // Mobile: Smaller cards with tighter animation
-              if (index === 0) {
-                translateX = scrollProgress * -110; // Reduced from -350
-                scale = 0.65 + scrollProgress * 0.1; // Smaller base scale
-                zIndex = 8;
-                opacity = scrollProgress;
-              } else if (index === 1) {
+              // Mobile: Circular rotation logic
+              const position = (index - currentIndex + plans.length) % plans.length;
+
+              if (position === 0) {
+                // Center card
                 translateX = 0;
-                scale = 0.85; // Smaller center card
+                scale = 1;
                 zIndex = 10;
                 opacity = 1;
-              } else if (index === 2) {
-                translateX = scrollProgress * 110; // Reduced from 350
-                scale = 0.65 + scrollProgress * 0.1;
+              } else if (position === 1) {
+                // Right card (partially visible)
+                translateX = 200;
+                scale = 0.7;
                 zIndex = 8;
-                opacity = scrollProgress;
+                opacity = 0.4;
+              } else if (position === 2) {
+                // Left card (partially visible)
+                translateX = -200;
+                scale = 0.7;
+                zIndex = 8;
+                opacity = 0.4;
               }
             } else if (isSmallTablet) {
               // Small Tablet: Medium-sized cards
               if (index === 0) {
                 translateX = scrollProgress * -180;
-                scale = 0.7 + scrollProgress * 0.1;
+                scale = 0.7 + scrollProgress * 0.15;
                 zIndex = 8;
-                opacity = scrollProgress;
+                opacity = 0.3 + scrollProgress * 0.7;
               } else if (index === 1) {
                 translateX = 0;
                 scale = 0.95;
@@ -151,17 +238,17 @@ const Plans = () => {
                 opacity = 1;
               } else if (index === 2) {
                 translateX = scrollProgress * 180;
-                scale = 0.7 + scrollProgress * 0.1;
+                scale = 0.7 + scrollProgress * 0.15;
                 zIndex = 8;
-                opacity = scrollProgress;
+                opacity = 0.3 + scrollProgress * 0.7;
               }
             } else if (isTablet) {
               // Tablet: Reduced movement
               if (index === 0) {
                 translateX = scrollProgress * -250;
-                scale = 0.8 + scrollProgress * 0.1;
+                scale = 0.8 + scrollProgress * 0.15;
                 zIndex = 8;
-                opacity = scrollProgress;
+                opacity = 0.3 + scrollProgress * 0.7;
               } else if (index === 1) {
                 translateX = 0;
                 scale = 1.01;
@@ -169,17 +256,17 @@ const Plans = () => {
                 opacity = 1;
               } else if (index === 2) {
                 translateX = scrollProgress * 250;
-                scale = 0.8 + scrollProgress * 0.1;
+                scale = 0.8 + scrollProgress * 0.15;
                 zIndex = 8;
-                opacity = scrollProgress;
+                opacity = 0.3 + scrollProgress * 0.7;
               }
             } else {
               // Desktop: Full animation
               if (index === 0) {
                 translateX = scrollProgress * -350;
-                scale = 0.75 + scrollProgress * 0.1;
+                scale = 0.75 + scrollProgress * 0.15;
                 zIndex = 8;
-                opacity = scrollProgress;
+                opacity = 0.3 + scrollProgress * 0.7;
               } else if (index === 1) {
                 translateX = 0;
                 scale = 1.01;
@@ -187,23 +274,27 @@ const Plans = () => {
                 opacity = 1;
               } else if (index === 2) {
                 translateX = scrollProgress * 350;
-                scale = 0.75 + scrollProgress * 0.1;
+                scale = 0.75 + scrollProgress * 0.15;
                 zIndex = 8;
-                opacity = scrollProgress;
+                opacity = 0.3 + scrollProgress * 0.7;
               }
             }
 
             return (
               <div
                 key={plan.id}
-                className="absolute transition-all duration-700 ease-out"
+                className={`absolute ${
+                  isMobile
+                    ? "transition-all duration-500 ease-in-out"
+                    : "transition-all duration-700 ease-out"
+                }`}
                 style={{
                   transform: `translateX(${translateX}px) scale(${scale})`,
                   zIndex,
                   opacity,
                 }}
               >
-                <div className="w-56 sm:w-72 md:w-80 lg:w-80 bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300">
+                <div className="w-56 sm:w-72 md:w-80 lg:w-80 h-[500px] sm:h-[560px] md:h-[580px] lg:h-[600px] bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 flex flex-col">
                   {/* Image */}
                   <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <img
@@ -223,8 +314,8 @@ const Plans = () => {
                   </div>
 
                   {/* Features */}
-                  <div className="p-6 sm:p-8">
-                    <ul className="space-y-3 sm:space-y-4">
+                  <div className="p-6 sm:p-8 flex-1 flex flex-col">
+                    <ul className="space-y-3 sm:space-y-4 flex-1">
                       {plan.features.map((feature, idx) => (
                         <li
                           key={idx}
@@ -264,6 +355,31 @@ const Plans = () => {
               </div>
             );
           })}
+
+          {/* Mobile Indicator Dots */}
+          <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex gap-2 z-20 sm:hidden">
+            {plans.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => {
+                  setCurrentIndex(index);
+                  // Reset auto-rotate timer
+                  if (autoRotateRef.current) {
+                    clearInterval(autoRotateRef.current);
+                    autoRotateRef.current = setInterval(() => {
+                      setCurrentIndex((prev) => (prev + 1) % plans.length);
+                    }, 2000);
+                  }
+                }}
+                className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? "bg-[#002650] w-8"
+                    : "bg-gray-300 hover:bg-gray-400"
+                }`}
+                aria-label={`Go to plan ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
       </div>
 
