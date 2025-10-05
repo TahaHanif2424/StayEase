@@ -79,15 +79,10 @@ const Plans = () => {
     <section
       id="plans"
       ref={sectionRef}
-<<<<<<< HEAD
-      className="min-h-0 sm:min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden pb-2 sm:pb-12"
-=======
       className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-20 px-6 md:px-12 relative overflow-hidden"
->>>>>>> parent of 3051158 (Merge branch 'main' of https://github.com/TahaHanif2424/StayEase)
     >
-      {/* Background Gradient Shapes
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
-      <div className="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div> */}
+      <div className="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div>
 
       <div className="relative z-10">
         {/* Section Header */}
