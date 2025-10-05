@@ -39,11 +39,11 @@ const Plans = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Auto-rotate for small screens
+  // Auto-rotate for small screens and tablets
   useEffect(() => {
-    const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+    const isMobileOrTablet = typeof window !== "undefined" && window.innerWidth < 1024;
 
-    if (isMobile) {
+    if (isMobileOrTablet) {
       autoRotateRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
       }, 4000);
@@ -124,14 +124,14 @@ const Plans = () => {
     <section
       id="plans"
       ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-20 px-6 md:px-12 relative overflow-hidden"
+      className="min-h-screen max-h-[770px]:min-h-[120vh] bg-gradient-to-b from-gray-50 to-white py-8 sm:py-12 lg:py-20 px-6 md:px-12 relative overflow-hidden"
     >
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div>
 
       <div className="relative z-10">
         {/* Section Header */}
-        <div className="mb-10 sm:mb-16 md:mb-20">
+        <div className="mb-6 sm:mb-10 lg:mb-16">
           <SectionHeading
             title="Our Plans"
             subtitle="Choose the perfect plan that fits your lifestyle and budget"
@@ -140,11 +140,11 @@ const Plans = () => {
         </div>
 
         {/* Cards Container with Expanding Animation */}
-        <div className="relative flex items-start sm:items-center justify-center min-h-[350px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[500px] pt-8 sm:pt-0">
-          {/* Mobile Navigation Buttons */}
+        <div className="relative flex items-start lg:items-center justify-center min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:min-h-[500px] pt-4 lg:pt-0">
+          {/* Mobile and Tablet Navigation Buttons */}
           <button
             onClick={rotateLeft}
-            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 sm:hidden"
+            className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Previous plan"
           >
             <svg
@@ -164,7 +164,7 @@ const Plans = () => {
 
           <button
             onClick={rotateRight}
-            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 sm:hidden"
+            className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Next plan"
           >
             <svg
@@ -200,8 +200,8 @@ const Plans = () => {
             let zIndex = 10;
             let opacity = 1;
 
-            if (isMobile) {
-              // Mobile: Circular rotation logic
+            if (isMobile || isSmallTablet || isTablet) {
+              // Mobile and Tablet: Circular rotation logic
               const position =
                 (index - currentIndex + plans.length) % plans.length;
 
@@ -223,42 +223,6 @@ const Plans = () => {
                 scale = 0.7;
                 zIndex = 8;
                 opacity = 0.4;
-              }
-            } else if (isSmallTablet) {
-              // Small Tablet: Medium-sized cards
-              if (index === 0) {
-                translateX = scrollProgress * -180;
-                scale = 0.7 + scrollProgress * 0.15;
-                zIndex = 8;
-                opacity = 0.3 + scrollProgress * 0.7;
-              } else if (index === 1) {
-                translateX = 0;
-                scale = 0.95;
-                zIndex = 10;
-                opacity = 1;
-              } else if (index === 2) {
-                translateX = scrollProgress * 180;
-                scale = 0.7 + scrollProgress * 0.15;
-                zIndex = 8;
-                opacity = 0.3 + scrollProgress * 0.7;
-              }
-            } else if (isTablet) {
-              // Tablet: Reduced movement
-              if (index === 0) {
-                translateX = scrollProgress * -250;
-                scale = 0.8 + scrollProgress * 0.15;
-                zIndex = 8;
-                opacity = 0.3 + scrollProgress * 0.7;
-              } else if (index === 1) {
-                translateX = 0;
-                scale = 1.01;
-                zIndex = 10;
-                opacity = 1;
-              } else if (index === 2) {
-                translateX = scrollProgress * 250;
-                scale = 0.8 + scrollProgress * 0.15;
-                zIndex = 8;
-                opacity = 0.3 + scrollProgress * 0.7;
               }
             } else {
               // Desktop: Full animation
@@ -284,7 +248,7 @@ const Plans = () => {
               <div
                 key={plan.id}
                 className={`absolute ${
-                  isMobile
+                  isMobile || isSmallTablet || isTablet
                     ? "transition-all duration-500 ease-in-out"
                     : "transition-all duration-700 ease-out"
                 }`}
@@ -294,7 +258,7 @@ const Plans = () => {
                   opacity,
                 }}
               >
-                <div className="w-56 sm:w-72 md:w-80 lg:w-80 h-[500px] sm:h-[560px] md:h-[580px] lg:h-[600px] bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 flex flex-col">
+                <div className="w-56 sm:w-72 md:w-80 lg:w-80 h-[400px] sm:h-[450px] md:h-[500px] lg:h-[600px] bg-white rounded-3xl shadow-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 flex flex-col">
                   {/* Image */}
                   <div className="relative h-48 sm:h-56 md:h-64 overflow-hidden">
                     <img
@@ -356,8 +320,8 @@ const Plans = () => {
             );
           })}
 
-          {/* Mobile Indicator Dots */}
-          <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 flex gap-2 z-20 sm:hidden">
+          {/* Mobile and Tablet Indicator Dots */}
+          <div className="absolute -bottom-48 sm:-bottom-56 left-1/2 -translate-x-1/2 flex gap-2 z-20 lg:hidden">
             {plans.map((_, index) => (
               <button
                 key={index}
@@ -368,7 +332,7 @@ const Plans = () => {
                     clearInterval(autoRotateRef.current);
                     autoRotateRef.current = setInterval(() => {
                       setCurrentIndex((prev) => (prev + 1) % plans.length);
-                    }, 2000);
+                    }, 4000);
                   }
                 }}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
