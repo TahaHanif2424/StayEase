@@ -7,49 +7,22 @@ const Plans = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-
-  // NEW: track section height based on viewport height rule
-  const [sectionHeight, setSectionHeight] = useState<string>("100vh");
-
   const sectionRef = useRef<HTMLDivElement>(null);
+  const autoRotateRef = useRef<NodeJS.Timeout | null>(null);
 
-  // In the browser, setInterval returns a number (not NodeJS.Timeout)
-  const autoRotateRef = useRef<number | null>(null);
-
-  // ---- Handle dynamic section height (the actual fix) ----
-  useEffect(() => {
-    const computeSectionHeight = () => {
-      if (typeof window === "undefined") return;
-      const vh = window.innerHeight;
-      if (vh > 820) {
-        setSectionHeight("calc(100vh - 200px)");
-      } else {
-        setSectionHeight("100vh");
-      }
-    };
-
-    computeSectionHeight();
-    window.addEventListener("resize", computeSectionHeight);
-    window.addEventListener("orientationchange", computeSectionHeight);
-
-    return () => {
-      window.removeEventListener("resize", computeSectionHeight);
-      window.removeEventListener("orientationchange", computeSectionHeight);
-    };
-  }, []);
-
-  // ---- Scroll progress ----
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        const sectionHeightPx = sectionRef.current.offsetHeight;
+        const sectionHeight = sectionRef.current.offsetHeight;
 
+        // Calculate scroll progress based on how much of the section has been scrolled through
         if (rect.top <= windowHeight && rect.bottom >= 0) {
+          // Progress from 0 (section just entering view) to 1 (section almost scrolled past)
           const progress = Math.max(
             0,
-            Math.min((windowHeight - rect.top) / sectionHeightPx, 1)
+            Math.min((windowHeight - rect.top) / sectionHeight, 1)
           );
           setScrollProgress(progress);
         } else if (rect.top > windowHeight) {
@@ -61,51 +34,34 @@ const Plans = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll();
+    handleScroll(); // Initial check
+
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // ---- Auto-rotate for small screens and tablets ----
+  // Auto-rotate for small screens and tablets
   useEffect(() => {
-    const isMobileOrTablet =
-      typeof window !== "undefined" && window.innerWidth < 1024;
+    const isMobileOrTablet = typeof window !== "undefined" && window.innerWidth < 1024;
 
-    if (!isMobileOrTablet) return;
-
-    const start = () => {
-      stop();
-      autoRotateRef.current = window.setInterval(() => {
+    if (isMobileOrTablet) {
+      autoRotateRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
       }, 4000);
-    };
 
-    const stop = () => {
-      if (autoRotateRef.current) {
-        clearInterval(autoRotateRef.current);
-        autoRotateRef.current = null;
-      }
-    };
-
-    start();
-
-    const handleResize = () => {
-      // restart/stop based on breakpoint changes
-      if (window.innerWidth < 1024 && autoRotateRef.current == null) start();
-      if (window.innerWidth >= 1024) stop();
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => {
-      stop();
-      window.removeEventListener("resize", handleResize);
-    };
+      return () => {
+        if (autoRotateRef.current) {
+          clearInterval(autoRotateRef.current);
+        }
+      };
+    }
   }, []);
 
   const rotateRight = () => {
     setCurrentIndex((prev) => (prev + 1) % plans.length);
+    // Reset auto-rotate timer
     if (autoRotateRef.current) {
       clearInterval(autoRotateRef.current);
-      autoRotateRef.current = window.setInterval(() => {
+      autoRotateRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
       }, 4000);
     }
@@ -113,9 +69,10 @@ const Plans = () => {
 
   const rotateLeft = () => {
     setCurrentIndex((prev) => (prev - 1 + plans.length) % plans.length);
+    // Reset auto-rotate timer
     if (autoRotateRef.current) {
       clearInterval(autoRotateRef.current);
-      autoRotateRef.current = window.setInterval(() => {
+      autoRotateRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
       }, 4000);
     }
@@ -167,9 +124,7 @@ const Plans = () => {
     <section
       id="plans"
       ref={sectionRef}
-      // Removed the invalid Tailwind height variants; use dynamic height instead
-      className="bg-gradient-to-b from-gray-50 to-white py-8 sm:py-12 lg:py-20 px-6 md:px-12 relative overflow-hidden"
-      style={{ height: sectionHeight }}
+      className="min-h-screen max-h-[770px]:min-h-[120vh] bg-gradient-to-b from-gray-50 to-white py-8 sm:py-12 lg:py-20 px-6 md:px-12 relative overflow-hidden"
     >
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div>
@@ -249,22 +204,26 @@ const Plans = () => {
                 (index - currentIndex + plans.length) % plans.length;
 
               if (position === 0) {
+                // Center card
                 translateX = 0;
                 scale = 1;
                 zIndex = 10;
                 opacity = 1;
               } else if (position === 1) {
+                // Right card (partially visible)
                 translateX = 200;
                 scale = 0.7;
                 zIndex = 8;
                 opacity = 0.4;
               } else if (position === 2) {
+                // Left card (partially visible)
                 translateX = -200;
                 scale = 0.7;
                 zIndex = 8;
                 opacity = 0.4;
               }
             } else {
+              // Desktop: Full animation
               if (index === 0) {
                 translateX = scrollProgress * -350;
                 scale = 0.75 + scrollProgress * 0.15;
@@ -366,9 +325,10 @@ const Plans = () => {
                 key={index}
                 onClick={() => {
                   setCurrentIndex(index);
+                  // Reset auto-rotate timer
                   if (autoRotateRef.current) {
                     clearInterval(autoRotateRef.current);
-                    autoRotateRef.current = window.setInterval(() => {
+                    autoRotateRef.current = setInterval(() => {
                       setCurrentIndex((prev) => (prev + 1) % plans.length);
                     }, 4000);
                   }
