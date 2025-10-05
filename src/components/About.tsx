@@ -1,71 +1,19 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef } from "react";
 import SectionHeading from "./SectionHeading";
+import { useScrollProgress, useInViewport } from "../utils/hooks";
+import { BREAKPOINTS } from "../utils/constants";
 
 const About = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [card1Visible, setCard1Visible] = useState(false);
-  const [card2Visible, setCard2Visible] = useState(false);
-  const [card3Visible, setCard3Visible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   const card1Ref = useRef<HTMLDivElement>(null);
   const card2Ref = useRef<HTMLDivElement>(null);
   const card3Ref = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const sectionHeight = sectionRef.current.offsetHeight;
-
-        // Calculate scroll progress for the line animation
-        if (rect.top <= windowHeight && rect.bottom >= 0) {
-          const scrolled = windowHeight - rect.top;
-          const progress = Math.max(
-            0,
-            Math.min(scrolled / (sectionHeight + windowHeight * 0.5), 1)
-          );
-          setScrollProgress(progress);
-        } else if (rect.top > windowHeight) {
-          setScrollProgress(0);
-        } else if (rect.bottom < 0) {
-          setScrollProgress(1);
-        }
-      }
-
-      // Check each card individually (with reverse animation on scroll up)
-      const checkCard = (
-        ref: React.RefObject<HTMLDivElement | null>,
-        setter: (val: boolean) => void
-      ) => {
-        if (ref.current) {
-          const rect = ref.current.getBoundingClientRect();
-          const windowHeight = window.innerHeight;
-          // Adjust trigger point based on screen size
-          const isMobile = window.innerWidth < 768;
-          const triggerPoint = isMobile ? 0.85 : 0.8;
-
-          if (rect.top <= windowHeight * triggerPoint && rect.bottom >= 0) {
-            setter(true);
-          } else if (
-            rect.top > windowHeight * triggerPoint ||
-            rect.bottom < 0
-          ) {
-            setter(false);
-          }
-        }
-      };
-
-      checkCard(card1Ref, setCard1Visible);
-      checkCard(card2Ref, setCard2Visible);
-      checkCard(card3Ref, setCard3Visible);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const scrollProgress = useScrollProgress(sectionRef);
+  const triggerPoint = BREAKPOINTS.isMobile() ? 0.85 : 0.8;
+  const card1Visible = useInViewport(card1Ref, triggerPoint);
+  const card2Visible = useInViewport(card2Ref, triggerPoint);
+  const card3Visible = useInViewport(card3Ref, triggerPoint);
 
   return (
     <section
@@ -89,7 +37,6 @@ const About = () => {
           <SectionHeading
             title="About Us"
             subtitle="Transforming the way you find your perfect living space"
-            progress={scrollProgress}
           />
         </div>
 

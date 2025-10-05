@@ -1,9 +1,6 @@
-import { useRef } from "react";
-
 type Props = {
   title: string;
   subtitle?: string;
-  progress?: number;
   className?: string;
   isDark?: boolean;
 };
@@ -14,17 +11,13 @@ const SectionHeading = ({
   className = "",
   isDark = false,
 }: Props) => {
-  const wrapRef = useRef<HTMLDivElement | null>(null);
 
   const textColor = isDark ? "text-white" : "text-gray-900";
   const subtitleColor = isDark ? "text-white/80" : "text-gray-600";
   const lineColor = isDark ? "text-white/60" : "text-gray-400";
 
   return (
-    <div
-      ref={wrapRef}
-      className={`w-full flex flex-col items-center text-center px-4 ${className}`}
-    >
+    <div className={`w-full flex flex-col items-center text-center px-4 ${className}`}>
       <h2
         className={`font-montserrat text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold ${textColor} tracking-wide`}
         style={{ fontFamily: "'Montserrat', sans-serif" }}

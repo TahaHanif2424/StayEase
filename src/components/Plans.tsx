@@ -1,82 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import BookingModal from "./BookingModal";
 import SectionHeading from "./SectionHeading";
+import { useScrollProgress, useAutoRotate } from "../utils/hooks";
+import { SVG_ICONS, BREAKPOINTS } from "../utils/constants";
 
 const Plans = () => {
-  const [scrollProgress, setScrollProgress] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
   const sectionRef = useRef<HTMLDivElement>(null);
-  const autoRotateRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (sectionRef.current) {
-        const rect = sectionRef.current.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        const sectionHeight = sectionRef.current.offsetHeight;
-
-        // Calculate scroll progress based on how much of the section has been scrolled through
-        if (rect.top <= windowHeight && rect.bottom >= 0) {
-          // Progress from 0 (section just entering view) to 1 (section almost scrolled past)
-          const progress = Math.max(
-            0,
-            Math.min((windowHeight - rect.top) / sectionHeight, 1)
-          );
-          setScrollProgress(progress);
-        } else if (rect.top > windowHeight) {
-          setScrollProgress(0);
-        } else if (rect.bottom < 0) {
-          setScrollProgress(1);
-        }
-      }
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Auto-rotate for small screens and tablets
-  useEffect(() => {
-    const isMobileOrTablet = typeof window !== "undefined" && window.innerWidth < 1024;
-
-    if (isMobileOrTablet) {
-      autoRotateRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % plans.length);
-      }, 4000);
-
-      return () => {
-        if (autoRotateRef.current) {
-          clearInterval(autoRotateRef.current);
-        }
-      };
-    }
-  }, []);
-
-  const rotateRight = () => {
-    setCurrentIndex((prev) => (prev + 1) % plans.length);
-    // Reset auto-rotate timer
-    if (autoRotateRef.current) {
-      clearInterval(autoRotateRef.current);
-      autoRotateRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % plans.length);
-      }, 4000);
-    }
-  };
-
-  const rotateLeft = () => {
-    setCurrentIndex((prev) => (prev - 1 + plans.length) % plans.length);
-    // Reset auto-rotate timer
-    if (autoRotateRef.current) {
-      clearInterval(autoRotateRef.current);
-      autoRotateRef.current = setInterval(() => {
-        setCurrentIndex((prev) => (prev + 1) % plans.length);
-      }, 4000);
-    }
-  };
+  const scrollProgress = useScrollProgress(sectionRef, 1);
+  const { currentIndex, rotateNext, rotatePrev, rotateTo } = useAutoRotate(
+    3,
+    4000,
+    BREAKPOINTS.isMobileOrTablet()
+  );
 
   const plans = [
     {
@@ -84,41 +22,64 @@ const Plans = () => {
       title: "Basic Plan",
       image: "/1.png",
       price: "$299/month",
-      features: [
-        "Shared Room",
-        "Wi-Fi Included",
-        "Common Kitchen",
-        "Basic Amenities",
-      ],
+      features: ["Shared Room", "Wi-Fi Included", "Common Kitchen", "Basic Amenities"],
     },
     {
       id: 2,
       title: "Premium Plan",
       image: "/2.png",
       price: "$599/month",
-      features: [
-        "Private Room",
-        "High-Speed Wi-Fi",
-        "Personal Kitchen",
-        "Premium Amenities",
-        "Gym Access",
-      ],
+      features: ["Private Room", "High-Speed Wi-Fi", "Personal Kitchen", "Premium Amenities", "Gym Access"],
     },
     {
       id: 3,
       title: "Luxury Plan",
       image: "/3.png",
       price: "$999/month",
-      features: [
-        "Studio Apartment",
-        "Ultra-Fast Wi-Fi",
-        "Full Kitchen",
-        "Luxury Amenities",
-        "Pool & Gym",
-        "Concierge Service",
-      ],
+      features: ["Studio Apartment", "Ultra-Fast Wi-Fi", "Full Kitchen", "Luxury Amenities", "Pool & Gym", "Concierge Service"],
     },
   ];
+
+  const getCardStyles = (index: number) => {
+    const isMobile = BREAKPOINTS.isMobile();
+    const isSmallTablet = BREAKPOINTS.isSmallTablet();
+    const isTablet = BREAKPOINTS.isTablet();
+
+    let translateX = 0;
+    let scale = 1;
+    let zIndex = 10;
+    let opacity = 1;
+
+    if (isMobile || isSmallTablet || isTablet) {
+      const position = (index - currentIndex + plans.length) % plans.length;
+      if (position === 0) {
+        translateX = 0;
+        scale = 1;
+        zIndex = 10;
+        opacity = 1;
+      } else if (position === 1) {
+        translateX = 200;
+        scale = 0.7;
+        zIndex = 8;
+        opacity = 0.4;
+      } else {
+        translateX = -200;
+        scale = 0.7;
+        zIndex = 8;
+        opacity = 0.4;
+      }
+    } else {
+      // Desktop layout
+      const transforms = [
+        { translateX: scrollProgress * -350, scale: 0.75 + scrollProgress * 0.15, zIndex: 8, opacity: 0.3 + scrollProgress * 0.7 },
+        { translateX: 0, scale: 1.01, zIndex: 10, opacity: 1 },
+        { translateX: scrollProgress * 350, scale: 0.75 + scrollProgress * 0.15, zIndex: 8, opacity: 0.3 + scrollProgress * 0.7 },
+      ];
+      return transforms[index];
+    }
+
+    return { translateX, scale, zIndex, opacity };
+  };
 
   return (
     <section
@@ -135,7 +96,6 @@ const Plans = () => {
           <SectionHeading
             title="Our Plans"
             subtitle="Choose the perfect plan that fits your lifestyle and budget"
-            progress={scrollProgress}
           />
         </div>
 
@@ -143,110 +103,30 @@ const Plans = () => {
         <div className="relative flex items-start lg:items-center justify-center min-h-[300px] sm:min-h-[350px] md:min-h-[400px] lg:min-h-[500px] pt-4 lg:pt-0">
           {/* Mobile and Tablet Navigation Buttons */}
           <button
-            onClick={rotateLeft}
+            onClick={rotatePrev}
             className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Previous plan"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            {SVG_ICONS.chevronLeft}
           </button>
 
           <button
-            onClick={rotateRight}
+            onClick={rotateNext}
             className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Next plan"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            {SVG_ICONS.chevronRight}
           </button>
 
           {plans.map((plan, index) => {
-            const isMobile =
-              typeof window !== "undefined" && window.innerWidth < 640;
-            const isSmallTablet =
-              typeof window !== "undefined" &&
-              window.innerWidth >= 640 &&
-              window.innerWidth < 768;
-            const isTablet =
-              typeof window !== "undefined" &&
-              window.innerWidth >= 768 &&
-              window.innerWidth < 1024;
-
-            let translateX = 0;
-            let scale = 1;
-            let zIndex = 10;
-            let opacity = 1;
-
-            if (isMobile || isSmallTablet || isTablet) {
-              const position =
-                (index - currentIndex + plans.length) % plans.length;
-
-              if (position === 0) {
-                // Center card
-                translateX = 0;
-                scale = 1;
-                zIndex = 10;
-                opacity = 1;
-              } else if (position === 1) {
-                // Right card (partially visible)
-                translateX = 200;
-                scale = 0.7;
-                zIndex = 8;
-                opacity = 0.4;
-              } else if (position === 2) {
-                // Left card (partially visible)
-                translateX = -200;
-                scale = 0.7;
-                zIndex = 8;
-                opacity = 0.4;
-              }
-            } else {
-              // Desktop: Full animation
-              if (index === 0) {
-                translateX = scrollProgress * -350;
-                scale = 0.75 + scrollProgress * 0.15;
-                zIndex = 8;
-                opacity = 0.3 + scrollProgress * 0.7;
-              } else if (index === 1) {
-                translateX = 0;
-                scale = 1.01;
-                zIndex = 10;
-                opacity = 1;
-              } else if (index === 2) {
-                translateX = scrollProgress * 350;
-                scale = 0.75 + scrollProgress * 0.15;
-                zIndex = 8;
-                opacity = 0.3 + scrollProgress * 0.7;
-              }
-            }
+            const { translateX, scale, zIndex, opacity } = getCardStyles(index);
+            const isMobileOrTablet = BREAKPOINTS.isMobileOrTablet();
 
             return (
               <div
                 key={plan.id}
                 className={`absolute ${
-                  isMobile || isSmallTablet || isTablet
+                  isMobileOrTablet
                     ? "transition-all duration-500 ease-in-out"
                     : "transition-all duration-700 ease-out"
                 }`}
@@ -279,26 +159,9 @@ const Plans = () => {
                   <div className="p-6 sm:p-8 flex-1 flex flex-col">
                     <ul className="space-y-3 sm:space-y-4 flex-1">
                       {plan.features.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-center gap-2 sm:gap-3 text-gray-700"
-                        >
-                          <svg
-                            className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                          <span className="text-sm sm:text-base">
-                            {feature}
-                          </span>
+                        <li key={idx} className="flex items-center gap-2 sm:gap-3 text-gray-700">
+                          {SVG_ICONS.checkmark}
+                          <span className="text-sm sm:text-base">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -323,20 +186,9 @@ const Plans = () => {
             {plans.map((_, index) => (
               <button
                 key={index}
-                onClick={() => {
-                  setCurrentIndex(index);
-                  // Reset auto-rotate timer
-                  if (autoRotateRef.current) {
-                    clearInterval(autoRotateRef.current);
-                    autoRotateRef.current = setInterval(() => {
-                      setCurrentIndex((prev) => (prev + 1) % plans.length);
-                    }, 4000);
-                  }
-                }}
+                onClick={() => rotateTo(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "bg-[#002650] w-8"
-                    : "bg-gray-300 hover:bg-gray-400"
+                  index === currentIndex ? "bg-[#002650] w-8" : "bg-gray-300 hover:bg-gray-400"
                 }`}
                 aria-label={`Go to plan ${index + 1}`}
               />
