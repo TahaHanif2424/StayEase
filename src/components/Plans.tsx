@@ -46,7 +46,7 @@ const Plans = () => {
     if (isMobile) {
       autoRotateRef.current = setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
-      }, 2000);
+      }, 4000);
 
       return () => {
         if (autoRotateRef.current) {
