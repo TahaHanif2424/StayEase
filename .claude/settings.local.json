@@ -1,6 +1,6 @@
 {
   "permissions": {
-    "allow": ["WebSearch", "Bash(npm install:*)", "WebFetch(domain:vyro.ai)"],
+    "allow": ["WebSearch", "Bash(npm install:*)"],
     "deny": [],
     "ask": []
   }
