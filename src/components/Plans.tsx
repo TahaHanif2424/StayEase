@@ -7,22 +7,49 @@ const Plans = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState("");
   const [currentIndex, setCurrentIndex] = useState(0);
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const autoRotateRef = useRef<NodeJS.Timeout | null>(null);
 
+  // NEW: track section height based on viewport height rule
+  const [sectionHeight, setSectionHeight] = useState<string>("100vh");
+
+  const sectionRef = useRef<HTMLDivElement>(null);
+
+  // In the browser, setInterval returns a number (not NodeJS.Timeout)
+  const autoRotateRef = useRef<number | null>(null);
+
+  // ---- Handle dynamic section height (the actual fix) ----
+  useEffect(() => {
+    const computeSectionHeight = () => {
+      if (typeof window === "undefined") return;
+      const vh = window.innerHeight;
+      if (vh > 820) {
+        setSectionHeight("calc(100vh - 200px)");
+      } else {
+        setSectionHeight("100vh");
+      }
+    };
+
+    computeSectionHeight();
+    window.addEventListener("resize", computeSectionHeight);
+    window.addEventListener("orientationchange", computeSectionHeight);
+
+    return () => {
+      window.removeEventListener("resize", computeSectionHeight);
+      window.removeEventListener("orientationchange", computeSectionHeight);
+    };
+  }, []);
+
+  // ---- Scroll progress ----
   useEffect(() => {
     const handleScroll = () => {
       if (sectionRef.current) {
         const rect = sectionRef.current.getBoundingClientRect();
         const windowHeight = window.innerHeight;
-        const sectionHeight = sectionRef.current.offsetHeight;
+        const sectionHeightPx = sectionRef.current.offsetHeight;
 
-        // Calculate scroll progress based on how much of the section has been scrolled through
         if (rect.top <= windowHeight && rect.bottom >= 0) {
-          // Progress from 0 (section just entering view) to 1 (section almost scrolled past)
           const progress = Math.max(
             0,
-            Math.min((windowHeight - rect.top) / sectionHeight, 1)
+            Math.min((windowHeight - rect.top) / sectionHeightPx, 1)
           );
           setScrollProgress(progress);
         } else if (rect.top > windowHeight) {
@@ -34,34 +61,51 @@ const Plans = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    handleScroll(); // Initial check
-
+    handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Auto-rotate for small screens and tablets
+  // ---- Auto-rotate for small screens and tablets ----
   useEffect(() => {
-    const isMobileOrTablet = typeof window !== "undefined" && window.innerWidth < 1024;
+    const isMobileOrTablet =
+      typeof window !== "undefined" && window.innerWidth < 1024;
 
-    if (isMobileOrTablet) {
-      autoRotateRef.current = setInterval(() => {
+    if (!isMobileOrTablet) return;
+
+    const start = () => {
+      stop();
+      autoRotateRef.current = window.setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
       }, 4000);
+    };
 
-      return () => {
-        if (autoRotateRef.current) {
-          clearInterval(autoRotateRef.current);
-        }
-      };
-    }
+    const stop = () => {
+      if (autoRotateRef.current) {
+        clearInterval(autoRotateRef.current);
+        autoRotateRef.current = null;
+      }
+    };
+
+    start();
+
+    const handleResize = () => {
+      // restart/stop based on breakpoint changes
+      if (window.innerWidth < 1024 && autoRotateRef.current == null) start();
+      if (window.innerWidth >= 1024) stop();
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => {
+      stop();
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
 
   const rotateRight = () => {
     setCurrentIndex((prev) => (prev + 1) % plans.length);
-    // Reset auto-rotate timer
     if (autoRotateRef.current) {
       clearInterval(autoRotateRef.current);
-      autoRotateRef.current = setInterval(() => {
+      autoRotateRef.current = window.setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
       }, 4000);
     }
@@ -69,10 +113,9 @@ const Plans = () => {
 
   const rotateLeft = () => {
     setCurrentIndex((prev) => (prev - 1 + plans.length) % plans.length);
-    // Reset auto-rotate timer
     if (autoRotateRef.current) {
       clearInterval(autoRotateRef.current);
-      autoRotateRef.current = setInterval(() => {
+      autoRotateRef.current = window.setInterval(() => {
         setCurrentIndex((prev) => (prev + 1) % plans.length);
       }, 4000);
     }
@@ -84,12 +127,7 @@ const Plans = () => {
       title: "Basic Plan",
       image: "/1.png",
       price: "$299/month",
-      features: [
-        "Shared Room",
-        "Wi-Fi Included",
-        "Common Kitchen",
-        "Basic Amenities",
-      ],
+      features: ["Shared Room", "Wi-Fi Included", "Common Kitchen", "Basic Amenities"],
     },
     {
       id: 2,
@@ -124,7 +162,9 @@ const Plans = () => {
     <section
       id="plans"
       ref={sectionRef}
-      className="min-h-screen max-h-[770px]:min-h-[120vh] bg-gradient-to-b from-gray-50 to-white py-8 sm:py-12 lg:py-20 px-6 md:px-12 relative overflow-hidden"
+      // Removed the invalid Tailwind height variants; use dynamic height instead
+      className="bg-gradient-to-b from-gray-50 to-white py-8 sm:py-12 lg:py-20 px-6 md:px-12 relative overflow-hidden"
+      style={{ height: sectionHeight }}
     >
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
       <div className="absolute bottom-40 left-20 w-96 h-96 bg-gradient-to-br from-pink-200 to-orange-200 rounded-full opacity-20 blur-3xl"></div>
@@ -147,18 +187,8 @@ const Plans = () => {
             className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Previous plan"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
             </svg>
           </button>
 
@@ -167,33 +197,17 @@ const Plans = () => {
             className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 hover:bg-white text-gray-800 rounded-full p-3 shadow-lg transition-all duration-300 hover:scale-110 lg:hidden"
             aria-label="Next plan"
           >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </button>
 
           {plans.map((plan, index) => {
-            // Responsive animation values
-            const isMobile =
-              typeof window !== "undefined" && window.innerWidth < 640;
+            const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
             const isSmallTablet =
-              typeof window !== "undefined" &&
-              window.innerWidth >= 640 &&
-              window.innerWidth < 768;
+              typeof window !== "undefined" && window.innerWidth >= 640 && window.innerWidth < 768;
             const isTablet =
-              typeof window !== "undefined" &&
-              window.innerWidth >= 768 &&
-              window.innerWidth < 1024;
+              typeof window !== "undefined" && window.innerWidth >= 768 && window.innerWidth < 1024;
 
             let translateX = 0;
             let scale = 1;
@@ -201,31 +215,25 @@ const Plans = () => {
             let opacity = 1;
 
             if (isMobile || isSmallTablet || isTablet) {
-              // Mobile and Tablet: Circular rotation logic
-              const position =
-                (index - currentIndex + plans.length) % plans.length;
+              const position = (index - currentIndex + plans.length) % plans.length;
 
               if (position === 0) {
-                // Center card
                 translateX = 0;
                 scale = 1;
                 zIndex = 10;
                 opacity = 1;
               } else if (position === 1) {
-                // Right card (partially visible)
                 translateX = 200;
                 scale = 0.7;
                 zIndex = 8;
                 opacity = 0.4;
               } else if (position === 2) {
-                // Left card (partially visible)
                 translateX = -200;
                 scale = 0.7;
                 zIndex = 8;
                 opacity = 0.4;
               }
             } else {
-              // Desktop: Full animation
               if (index === 0) {
                 translateX = scrollProgress * -350;
                 scale = 0.75 + scrollProgress * 0.15;
@@ -268,12 +276,8 @@ const Plans = () => {
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                     <div className="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6">
-                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">
-                        {plan.title}
-                      </h3>
-                      <p className="text-xl sm:text-2xl font-semibold text-white">
-                        {plan.price}
-                      </p>
+                      <h3 className="text-2xl sm:text-3xl font-bold text-white mb-1 sm:mb-2">{plan.title}</h3>
+                      <p className="text-xl sm:text-2xl font-semibold text-white">{plan.price}</p>
                     </div>
                   </div>
 
@@ -281,26 +285,11 @@ const Plans = () => {
                   <div className="p-6 sm:p-8 flex-1 flex flex-col">
                     <ul className="space-y-3 sm:space-y-4 flex-1">
                       {plan.features.map((feature, idx) => (
-                        <li
-                          key={idx}
-                          className="flex items-center gap-2 sm:gap-3 text-gray-700"
-                        >
-                          <svg
-                            className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M5 13l4 4L19 7"
-                            />
+                        <li key={idx} className="flex items-center gap-2 sm:gap-3 text-gray-700">
+                          <svg className="w-5 h-5 sm:w-6 sm:h-6 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                           </svg>
-                          <span className="text-sm sm:text-base">
-                            {feature}
-                          </span>
+                          <span className="text-sm sm:text-base">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -327,18 +316,15 @@ const Plans = () => {
                 key={index}
                 onClick={() => {
                   setCurrentIndex(index);
-                  // Reset auto-rotate timer
                   if (autoRotateRef.current) {
                     clearInterval(autoRotateRef.current);
-                    autoRotateRef.current = setInterval(() => {
+                    autoRotateRef.current = window.setInterval(() => {
                       setCurrentIndex((prev) => (prev + 1) % plans.length);
                     }, 4000);
                   }
                 }}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? "bg-[#002650] w-8"
-                    : "bg-gray-300 hover:bg-gray-400"
+                  index === currentIndex ? "bg-[#002650] w-8" : "bg-gray-300 hover:bg-gray-400"
                 }`}
                 aria-label={`Go to plan ${index + 1}`}
               />
