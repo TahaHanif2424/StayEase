@@ -203,7 +203,8 @@ const Plans = () => {
 
             if (isMobile) {
               // Mobile: Circular rotation logic
-              const position = (index - currentIndex + plans.length) % plans.length;
+              const position =
+                (index - currentIndex + plans.length) % plans.length;
 
               if (position === 0) {
                 // Center card
