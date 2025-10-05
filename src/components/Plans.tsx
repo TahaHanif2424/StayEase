@@ -124,7 +124,7 @@ const Plans = () => {
     <section
       id="plans"
       ref={sectionRef}
-      className="min-h-[70vh] bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden"
+      className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden"
     >
       {/* Background Gradient Shapes
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
@@ -141,7 +141,7 @@ const Plans = () => {
         </div>
 
         {/* Cards Container with Expanding Animation */}
-        <div className="relative flex items-center justify-center min-h-[350px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[500px]">
+        <div className="relative flex items-start sm:items-center justify-center min-h-[350px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[500px] pt-8 sm:pt-0">
           {/* Mobile Navigation Buttons */}
           <button
             onClick={rotateLeft}
@@ -358,7 +358,7 @@ const Plans = () => {
           })}
 
           {/* Mobile Indicator Dots */}
-          <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex gap-2 z-20 sm:hidden">
+          <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 flex gap-2 z-20 sm:hidden">
             {plans.map((_, index) => (
               <button
                 key={index}
