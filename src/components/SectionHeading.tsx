@@ -16,7 +16,6 @@ const SectionHeading = ({
 }: Props) => {
   const wrapRef = useRef<HTMLDivElement | null>(null);
 
-
   const textColor = isDark ? "text-white" : "text-gray-900";
   const subtitleColor = isDark ? "text-white/80" : "text-gray-600";
   const lineColor = isDark ? "text-white/60" : "text-gray-400";

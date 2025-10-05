@@ -141,7 +141,7 @@ const Plans = () => {
         </div>
 
         {/* Cards Container with Expanding Animation */}
-        <div className="relative flex items-center justify-center min-h-[420px] sm:min-h-[500px] md:min-h-[550px] lg:min-h-[600px]">
+        <div className="relative flex items-start sm:items-center justify-center min-h-[350px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[500px] pt-8 sm:pt-0">
           {/* Mobile Navigation Buttons */}
           <button
             onClick={rotateLeft}
@@ -203,7 +203,8 @@ const Plans = () => {
 
             if (isMobile) {
               // Mobile: Circular rotation logic
-              const position = (index - currentIndex + plans.length) % plans.length;
+              const position =
+                (index - currentIndex + plans.length) % plans.length;
 
               if (position === 0) {
                 // Center card
@@ -357,7 +358,7 @@ const Plans = () => {
           })}
 
           {/* Mobile Indicator Dots */}
-          <div className="absolute -bottom-20 left-1/2 -translate-x-1/2 flex gap-2 z-20 sm:hidden">
+          <div className="absolute -bottom-64 left-1/2 -translate-x-1/2 flex gap-2 z-20 sm:hidden">
             {plans.map((_, index) => (
               <button
                 key={index}
