@@ -22,21 +22,39 @@ const Plans = () => {
       title: "Basic Plan",
       image: "/1.png",
       price: "$299/month",
-      features: ["Shared Room", "Wi-Fi Included", "Common Kitchen", "Basic Amenities"],
+      features: [
+        "Shared Room",
+        "Wi-Fi Included",
+        "Common Kitchen",
+        "Basic Amenities",
+      ],
     },
     {
       id: 2,
       title: "Premium Plan",
       image: "/2.png",
       price: "$599/month",
-      features: ["Private Room", "High-Speed Wi-Fi", "Personal Kitchen", "Premium Amenities", "Gym Access"],
+      features: [
+        "Private Room",
+        "High-Speed Wi-Fi",
+        "Personal Kitchen",
+        "Premium Amenities",
+        "Gym Access",
+      ],
     },
     {
       id: 3,
       title: "Luxury Plan",
       image: "/3.png",
       price: "$999/month",
-      features: ["Studio Apartment", "Ultra-Fast Wi-Fi", "Full Kitchen", "Luxury Amenities", "Pool & Gym", "Concierge Service"],
+      features: [
+        "Studio Apartment",
+        "Ultra-Fast Wi-Fi",
+        "Full Kitchen",
+        "Luxury Amenities",
+        "Pool & Gym",
+        "Concierge Service",
+      ],
     },
   ];
 
@@ -71,9 +89,19 @@ const Plans = () => {
     } else {
       // Desktop layout
       const transforms = [
-        { translateX: scrollProgress * -350, scale: 0.75 + scrollProgress * 0.15, zIndex: 8, opacity: 0.3 + scrollProgress * 0.7 },
+        {
+          translateX: scrollProgress * -350,
+          scale: 0.75 + scrollProgress * 0.15,
+          zIndex: 8,
+          opacity: 0.3 + scrollProgress * 0.7,
+        },
         { translateX: 0, scale: 1.01, zIndex: 10, opacity: 1 },
-        { translateX: scrollProgress * 350, scale: 0.75 + scrollProgress * 0.15, zIndex: 8, opacity: 0.3 + scrollProgress * 0.7 },
+        {
+          translateX: scrollProgress * 350,
+          scale: 0.75 + scrollProgress * 0.15,
+          zIndex: 8,
+          opacity: 0.3 + scrollProgress * 0.7,
+        },
       ];
       return transforms[index];
     }
@@ -159,9 +187,14 @@ const Plans = () => {
                   <div className="p-6 sm:p-8 flex-1 flex flex-col">
                     <ul className="space-y-3 sm:space-y-4 flex-1">
                       {plan.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center gap-2 sm:gap-3 text-gray-700">
+                        <li
+                          key={idx}
+                          className="flex items-center gap-2 sm:gap-3 text-gray-700"
+                        >
                           {SVG_ICONS.checkmark}
-                          <span className="text-sm sm:text-base">{feature}</span>
+                          <span className="text-sm sm:text-base">
+                            {feature}
+                          </span>
                         </li>
                       ))}
                     </ul>
@@ -188,7 +221,9 @@ const Plans = () => {
                 key={index}
                 onClick={() => rotateTo(index)}
                 className={`w-2.5 h-2.5 rounded-full transition-all duration-300 ${
-                  index === currentIndex ? "bg-[#002650] w-8" : "bg-gray-300 hover:bg-gray-400"
+                  index === currentIndex
+                    ? "bg-[#002650] w-8"
+                    : "bg-gray-300 hover:bg-gray-400"
                 }`}
                 aria-label={`Go to plan ${index + 1}`}
               />

@@ -93,7 +93,8 @@ export const useAutoRotate = (
   }, [itemCount, interval, shouldRotate]);
 
   const rotateNext = () => setCurrentIndex((prev) => (prev + 1) % itemCount);
-  const rotatePrev = () => setCurrentIndex((prev) => (prev - 1 + itemCount) % itemCount);
+  const rotatePrev = () =>
+    setCurrentIndex((prev) => (prev - 1 + itemCount) % itemCount);
   const rotateTo = (index: number) => setCurrentIndex(index);
 
   return { currentIndex, rotateNext, rotatePrev, rotateTo };
