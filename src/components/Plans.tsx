@@ -124,7 +124,7 @@ const Plans = () => {
     <section
       id="plans"
       ref={sectionRef}
-      className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden"
+      className="min-h-[70vh] bg-gradient-to-b from-gray-50 to-white py-12 sm:py-16 md:py-20 px-4 sm:px-6 md:px-8 lg:px-12 relative overflow-hidden"
     >
       {/* Background Gradient Shapes
       <div className="absolute top-40 right-20 w-96 h-96 bg-gradient-to-br from-blue-200 to-purple-200 rounded-full opacity-20 blur-3xl"></div>
@@ -141,7 +141,7 @@ const Plans = () => {
         </div>
 
         {/* Cards Container with Expanding Animation */}
-        <div className="relative flex items-center justify-center min-h-[420px] sm:min-h-[500px] md:min-h-[550px] lg:min-h-[600px]">
+        <div className="relative flex items-center justify-center min-h-[350px] sm:min-h-[400px] md:min-h-[450px] lg:min-h-[500px]">
           {/* Mobile Navigation Buttons */}
           <button
             onClick={rotateLeft}
