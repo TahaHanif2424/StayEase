@@ -81,12 +81,11 @@ const About = () => {
                   Our Mission
                 </h3>
                 <p className="text-gray-700 leading-relaxed text-base sm:text-base md:text-lg">
-                  At StayEase, we're on a mission to revolutionize the hostel
+                  At StayEase, we are on a mission to revolutionize the hostel
                   and apartment search experience. We believe that finding your
                   ideal living space should be simple, transparent, and
-                  stress-free. Our platform connects students, professionals,
-                  and travelers with quality accommodations that fit their
-                  lifestyle and budget.
+                  stress-free. Our platform connects you with quality accommodations that best 
+                  fit your lifestyle and budget.
                 </p>
               </div>
               <div className="hidden lg:block w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#002650] to-[#003870] rounded-full border-4 border-white shadow-xl z-20"></div>

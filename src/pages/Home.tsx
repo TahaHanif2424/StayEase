@@ -54,7 +54,7 @@ const Home = () => {
 
           {/* Text Content - Left Aligned */}
           <div
-            className={`text-left transition-all duration-1000 delay-200 mt-6 sm:mt-8 md:mt-10 lg:mt-12 px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-3xl ${
+            className={`text-left transition-all duration-1000 delay-200 mt-16 sm:mt-8 md:mt-10 lg:mt-12 px-6 sm:px-8 md:px-12 lg:px-16 xl:px-20 max-w-3xl ${
               isLoaded
                 ? "opacity-100 translate-x-0"
                 : "opacity-0 -translate-x-10"
@@ -77,7 +77,7 @@ const Home = () => {
                   : "opacity-0 -translate-x-10"
               } ${isImage2Active ? "text-black/95" : "text-white/95"}`}
             >
-              <p className="mb-3 font-light overflow-hidden border-r-2 border-blue-300 animate-typing whitespace-nowrap pr-1">
+              <p className="mb-3 font-light">
                 Heading to <span className="font-semibold text-blue-900 bg-blue-200/15 px-2 py-1 rounded">Islamabad</span> for your entrance test? We've got your back.
               </p>
               <p className="mb-3 font-light" style={{ animationDelay: '3s' }}>
