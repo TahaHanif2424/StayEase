@@ -31,6 +31,28 @@ body {
   animation: zoom 8s ease-out forwards;
 }
 
+@keyframes typing {
+  0% {
+    width: 0;
+  }
+  50% {
+    width: 100%;
+  }
+  80% {
+    width: 100%;
+    border-right-color: rgb(147, 197, 253);
+  }
+  100% {
+    width: 100%;
+    border-right-color: transparent;
+  }
+}
+
+.animate-typing {
+  display: inline-block;
+  animation: typing 4s steps(80, end) forwards;
+}
+
 /* Hide scrollbar but keep functionality */
 .scrollbar-hide {
   -ms-overflow-style: none; /* IE and Edge */
