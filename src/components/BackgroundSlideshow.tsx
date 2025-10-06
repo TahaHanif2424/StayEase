@@ -1,16 +1,24 @@
 import { useState, useEffect } from "react";
 
-const BackgroundSlideshow = () => {
+interface BackgroundSlideshowProps {
+  onImageChange?: (index: number) => void;
+}
+
+const BackgroundSlideshow = ({ onImageChange }: BackgroundSlideshowProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const images = ["/1.png", "/3.png", "/4.png", "/2.png"];
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentImageIndex((prevIndex) => {
+        const newIndex = (prevIndex + 1) % images.length;
+        onImageChange?.(newIndex);
+        return newIndex;
+      });
     }, 6000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [onImageChange]);
 
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden">
