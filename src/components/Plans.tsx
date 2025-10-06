@@ -9,7 +9,7 @@ const Plans = () => {
   const [selectedPlan, setSelectedPlan] = useState("");
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  const scrollProgress = useScrollProgress(sectionRef, 1);
+  const scrollProgress = useScrollProgress(sectionRef, 0.2);
   const { currentIndex, rotateNext, rotatePrev, rotateTo } = useAutoRotate(
     3,
     4000,
@@ -204,7 +204,7 @@ const Plans = () => {
                         setSelectedPlan(plan.title);
                         setIsModalOpen(true);
                       }}
-                      className="w-full mt-6 sm:mt-8 py-3 sm:py-4 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base"
+                      className="w-full mt-6 sm:mt-8 py-3 sm:py-4 bg-[#002650] text-white font-semibold rounded-xl hover:bg-[#003870] transition-all duration-300 transform hover:scale-105 shadow-lg text-sm sm:text-base cursor-pointer"
                     >
                       Choose Plan
                     </button>
